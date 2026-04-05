@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Dashboard - Bobathon Demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .stat-card h3 {
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .stat-card .value {
+            color: #667eea;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        .stat-card .label {
+            color: #999;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .chart-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .chart-card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+        .table-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .table-card h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        tr:hover {
+            background: #f8f9ff;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .badge-critical { background: #fee; color: #c00; }
+        .badge-low { background: #ffeaa7; color: #d63031; }
+        .badge-medium { background: #dfe6e9; color: #2d3436; }
+        .badge-high { background: #d4edda; color: #155724; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Inventory Analytics Dashboard</h1>
+            <p>Bobathon_Demo_Test_1 Database - Real-time Insights</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Products</h3>
+                <div class="value">100</div>
+                <div class="label">Items in inventory</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Inventory Value</h3>
+                <div class="value">$657.2K</div>
+                <div class="label">Current stock value</div>
+            </div>
+            <div class="stat-card">
+                <h3>Average Price</h3>
+                <div class="value">$273</div>
+                <div class="label">Per product</div>
+            </div>
+            <div class="stat-card">
+                <h3>Average Stock</h3>
+                <div class="value">24</div>
+                <div class="label">Units per product</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h2>📦 Products by Category</h2>
+                <div class="chart-container">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h2>📊 Stock Level Distribution</h2>
+                <div class="chart-container">
+                    <canvas id="stockLevelChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h2>💰 Inventory Value by Category</h2>
+                <div class="chart-container">
+                    <canvas id="valueChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h2>💵 Price Range Distribution</h2>
+                <div class="chart-container">
+                    <canvas id="priceRangeChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-card">
+            <h2>🏆 Top 10 Most Valuable Products</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>SKU</th>
+                        <th>Product Name</th>
+                        <th>Category</th>
+                        <th>Stock</th>
+                        <th>Price</th>
+                        <th>Total Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <tr>
+                        <td><strong>1</strong></td>
+                        <td>SKU-1028</td>
+                        <td>Kitchenware Item 28</td>
+                        <td>Kitchenware</td>
+                        <td>47</td>
+                        <td>$490.98</td>
+                        <td><strong>$23076.06</strong></td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>2</strong></td>
+                        <td>SKU-1003</td>
+                        <td>Outdoor Item 3</td>
+                        <td>Outdoor</td>
+                        <td>49</td>
+                        <td>$466.68</td>
+                        <td><strong>$22867.32</strong></td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>3</strong></td>
+                        <td>SKU-1007</td>
+                        <td>Office Supplies Item 7</td>
+                        <td>Office Supplies</td>
+                        <td>46</td>
+                        <td>$466.03</td>
+                        <td><strong>$21437.38</strong></td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>4</strong></td>
+                        <td>SKU-1072</td>
+                        <td>Kitchenware Item 72</td>
+                        <td>Kitchenware</td>
+                        <td>47</td>
+                        <td>$416.88</td>
+                        <td><strong>$19593.36</strong></td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>5</strong></td>
+                        <td>SKU-1091</td>
+                        <td>Outdoor Item 91</td>
+                        <td>Outdoor</td>
+                        <td>47</td>
+                        <td>$413.31</td>
+                        <td><strong>$19425.57</strong></td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>6</strong></td>
+                        <td>SKU-1078</td>
+                        <td>Furniture Item 78</td>
+                        <td>Furniture</td>
+                        <td>41</td>
+                        <td>$469.55</td>
+                        <td><strong>$19251.55</strong></td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>7</strong></td>
+                        <td>SKU-1094</td>
+                        <td>Office Supplies Item 94</td>
+                        <td>Office Supplies</td>
+                        <td>49</td>
+                        <td>$345.85</td>
+                        <td><strong>$16946.65</strong></td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>8</strong></td>
+                        <td>SKU-1014</td>
+                        <td>Furniture Item 14</td>
+                        <td>Furniture</td>
+                        <td>45</td>
+                        <td>$353.33</td>
+                        <td><strong>$15899.85</strong></td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>9</strong></td>
+                        <td>SKU-1097</td>
+                        <td>Kitchenware Item 97</td>
+                        <td>Kitchenware</td>
+                        <td>32</td>
+                        <td>$466.44</td>
+                        <td><strong>$14926.08</strong></td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>10</strong></td>
+                        <td>SKU-1015</td>
+                        <td>Furniture Item 15</td>
+                        <td>Furniture</td>
+                        <td>46</td>
+                        <td>$317.95</td>
+                        <td><strong>$14625.70</strong></td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-card">
+            <h2>⚠️ Low Stock Alert (Stock < 10)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>SKU</th>
+                        <th>Product Name</th>
+                        <th>Category</th>
+                        <th>Stock</th>
+                        <th>Status</th>
+                        <th>Restock Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <tr>
+                        <td>SKU-1005</td>
+                        <td>Outdoor Item 5</td>
+                        <td>Outdoor</td>
+                        <td><strong>3</strong></td>
+                        <td><span class="badge badge-low">Critical</span></td>
+                        <td>$1287.02</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>SKU-1006</td>
+                        <td>Office Supplies Item 6</td>
+                        <td>Office Supplies</td>
+                        <td><strong>5</strong></td>
+                        <td><span class="badge badge-medium">Low</span></td>
+                        <td>$734.70</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>SKU-1013</td>
+                        <td>Electronics Item 13</td>
+                        <td>Electronics</td>
+                        <td><strong>2</strong></td>
+                        <td><span class="badge badge-low">Critical</span></td>
+                        <td>$390.08</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>SKU-1020</td>
+                        <td>Kitchenware Item 20</td>
+                        <td>Kitchenware</td>
+                        <td><strong>7</strong></td>
+                        <td><span class="badge badge-medium">Low</span></td>
+                        <td>$597.60</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>SKU-1023</td>
+                        <td>Kitchenware Item 23</td>
+                        <td>Kitchenware</td>
+                        <td><strong>7</strong></td>
+                        <td><span class="badge badge-medium">Low</span></td>
+                        <td>$968.22</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>SKU-1026</td>
+                        <td>Outdoor Item 26</td>
+                        <td>Outdoor</td>
+                        <td><strong>3</strong></td>
+                        <td><span class="badge badge-low">Critical</span></td>
+                        <td>$1808.80</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>SKU-1031</td>
+                        <td>Electronics Item 31</td>
+                        <td>Electronics</td>
+                        <td><strong>8</strong></td>
+                        <td><span class="badge badge-medium">Low</span></td>
+                        <td>$399.60</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>SKU-1042</td>
+                        <td>Outdoor Item 42</td>
+                        <td>Outdoor</td>
+                        <td><strong>5</strong></td>
+                        <td><span class="badge badge-medium">Low</span></td>
+                        <td>$686.65</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>SKU-1045</td>
+                        <td>Kitchenware Item 45</td>
+                        <td>Kitchenware</td>
+                        <td><strong>9</strong></td>
+                        <td><span class="badge badge-medium">Low</span></td>
+                        <td>$59.55</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>SKU-1049</td>
+                        <td>Office Supplies Item 49</td>
+                        <td>Office Supplies</td>
+                        <td><strong>4</strong></td>
+                        <td><span class="badge badge-low">Critical</span></td>
+                        <td>$143.16</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>SKU-1051</td>
+                        <td>Kitchenware Item 51</td>
+                        <td>Kitchenware</td>
+                        <td><strong>9</strong></td>
+                        <td><span class="badge badge-medium">Low</span></td>
+                        <td>$96.96</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>SKU-1054</td>
+                        <td>Electronics Item 54</td>
+                        <td>Electronics</td>
+                        <td><strong>7</strong></td>
+                        <td><span class="badge badge-medium">Low</span></td>
+                        <td>$790.44</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>SKU-1056</td>
+                        <td>Electronics Item 56</td>
+                        <td>Electronics</td>
+                        <td><strong>9</strong></td>
+                        <td><span class="badge badge-medium">Low</span></td>
+                        <td>$142.92</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>SKU-1057</td>
+                        <td>Furniture Item 57</td>
+                        <td>Furniture</td>
+                        <td><strong>1</strong></td>
+                        <td><span class="badge badge-low">Critical</span></td>
+                        <td>$2923.74</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>SKU-1059</td>
+                        <td>Electronics Item 59</td>
+                        <td>Electronics</td>
+                        <td><strong>6</strong></td>
+                        <td><span class="badge badge-medium">Low</span></td>
+                        <td>$126.16</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>SKU-1061</td>
+                        <td>Furniture Item 61</td>
+                        <td>Furniture</td>
+                        <td><strong>0</strong></td>
+                        <td><span class="badge badge-critical">Out of Stock</span></td>
+                        <td>$243.40</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>SKU-1064</td>
+                        <td>Outdoor Item 64</td>
+                        <td>Outdoor</td>
+                        <td><strong>4</strong></td>
+                        <td><span class="badge badge-low">Critical</span></td>
+                        <td>$702.30</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>SKU-1070</td>
+                        <td>Kitchenware Item 70</td>
+                        <td>Kitchenware</td>
+                        <td><strong>0</strong></td>
+                        <td><span class="badge badge-critical">Out of Stock</span></td>
+                        <td>$2375.20</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>SKU-1077</td>
+                        <td>Kitchenware Item 77</td>
+                        <td>Kitchenware</td>
+                        <td><strong>4</strong></td>
+                        <td><span class="badge badge-low">Critical</span></td>
+                        <td>$1772.58</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>SKU-1083</td>
+                        <td>Electronics Item 83</td>
+                        <td>Electronics</td>
+                        <td><strong>9</strong></td>
+                        <td><span class="badge badge-medium">Low</span></td>
+                        <td>$331.25</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>SKU-1087</td>
+                        <td>Furniture Item 87</td>
+                        <td>Furniture</td>
+                        <td><strong>8</strong></td>
+                        <td><span class="badge badge-medium">Low</span></td>
+                        <td>$565.42</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>SKU-1089</td>
+                        <td>Furniture Item 89</td>
+                        <td>Furniture</td>
+                        <td><strong>1</strong></td>
+                        <td><span class="badge badge-low">Critical</span></td>
+                        <td>$1202.67</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>SKU-1095</td>
+                        <td>Outdoor Item 95</td>
+                        <td>Outdoor</td>
+                        <td><strong>5</strong></td>
+                        <td><span class="badge badge-medium">Low</span></td>
+                        <td>$1210.10</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>SKU-1098</td>
+                        <td>Furniture Item 98</td>
+                        <td>Furniture</td>
+                        <td><strong>2</strong></td>
+                        <td><span class="badge badge-low">Critical</span></td>
+                        <td>$906.96</td>
+                    </tr>
+                        
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Category Distribution Chart
+        new Chart(document.getElementById('categoryChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ["Electronics","Office Supplies","Outdoor","Kitchenware","Furniture"],
+                datasets: [{
+                    data: [21,16,17,20,26],
+                    backgroundColor: [
+                        '#667eea', '#764ba2', '#f093fb', '#4facfe', '#43e97b'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // Stock Level Chart
+        new Chart(document.getElementById('stockLevelChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Critical (0)', 'Low (1-9)', 'Medium (10-29)', 'High (30+)'],
+                datasets: [{
+                    label: 'Number of Products',
+                    data: [2, 22, 40, 36],
+                    backgroundColor: ['#e74c3c', '#f39c12', '#3498db', '#2ecc71']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Value by Category Chart
+        new Chart(document.getElementById('valueChart'), {
+            type: 'bar',
+            data: {
+                labels: ["Electronics","Office Supplies","Outdoor","Kitchenware","Furniture"],
+                datasets: [{
+                    label: 'Total Value ($)',
+                    data: ["98780.01","115506.50","114287.44","136466.79","192185.26"],
+                    backgroundColor: '#667eea'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Price Range Chart
+        new Chart(document.getElementById('priceRangeChart'), {
+            type: 'pie',
+            data: {
+                labels: ["0-100","100-200","200-300","300-400","400+"],
+                datasets: [{
+                    data: [15,15,25,25,20],
+                    backgroundColor: [
+                        '#4facfe', '#00f2fe', '#43e97b', '#38f9d7', '#fa709a'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

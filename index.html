@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bob-a-thon: MongoDB Made Simple with AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background: #1a1a2e;
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 30px 20px;
+            background: #16213e;
+            border-bottom: 2px solid #0f3460;
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.4em;
+            margin-bottom: 8px;
+            color: #00d4ff;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-header p {
+            font-size: 0.85em;
+            color: #a8b2d1;
+            font-weight: 300;
+        }
+
+        .nav-section {
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-section-title {
+            padding: 10px 20px;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #95a5a6;
+            font-weight: 600;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 12px 20px 12px 40px;
+            color: #ccd6f6;
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+            font-size: 0.9em;
+        }
+
+        .nav-link:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-left-color: #00d4ff;
+            padding-left: 45px;
+            color: #00d4ff;
+        }
+
+        .nav-link.active {
+            background: rgba(0, 212, 255, 0.15);
+            border-left-color: #00d4ff;
+            font-weight: 600;
+            color: #00d4ff;
+        }
+
+        .nav-link i {
+            margin-right: 10px;
+            width: 16px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px 60px;
+            background: #f8f9fa;
+        }
+
+        .content-section {
+            background: white;
+            padding: 40px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .content-section h2 {
+            color: #1a1a2e;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #00d4ff;
+            font-weight: 600;
+        }
+
+        .content-section h3 {
+            color: #16213e;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .content-section h4 {
+            color: #0f3460;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        pre {
+            background: #1a1a2e;
+            color: #ccd6f6;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border-left: 4px solid #00d4ff;
+        }
+
+        code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .highlight-box {
+            background: #e6f7ff;
+            border-left: 4px solid #00d4ff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+
+        .screenshot-placeholder {
+            background: #ecf0f1;
+            border: 2px dashed #95a5a6;
+            padding: 60px 20px;
+            text-align: center;
+            margin: 20px 0;
+            border-radius: 8px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .comparison-table th {
+            background: #16213e;
+            color: white;
+            font-weight: 600;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin: 5px 5px 5px 0;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        ul, ol {
+            margin: 15px 0 15px 30px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 1px solid #00d4ff;
+        }
+
+        .hero h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #00d4ff;
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            color: #ccd6f6;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .container {
+                flex-direction: column;
+            }
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #00d4ff;
+            color: #1a1a2e;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            opacity: 0;
+            pointer-events: none;
+            font-weight: bold;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .back-to-top:hover {
+            background: #00b8d4;
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1>Bob-a-thon</h1>
+                <p>MongoDB Made Simple with AI</p>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Getting Started</div>
+                <a href="#overview" class="nav-link"><i class="fas fa-book"></i> Overview</a>
+                <a href="#what-you-learn" class="nav-link"><i class="fas fa-graduation-cap"></i> What You'll Learn</a>
+                <a href="#prerequisites" class="nav-link"><i class="fas fa-list-check"></i> Prerequisites</a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Lab Scenarios</div>
+                <a href="#scenario-1" class="nav-link"><i class="fas fa-plug"></i> Scenario 1: Connect</a>
+                <a href="#scenario-2" class="nav-link"><i class="fas fa-database"></i> Scenario 2: Discover DBs</a>
+                <a href="#scenario-3" class="nav-link"><i class="fas fa-folder-open"></i> Scenario 3: Explore Collections</a>
+                <a href="#scenario-4" class="nav-link"><i class="fas fa-search"></i> Scenario 4: Query Data</a>
+                <a href="#scenario-5" class="nav-link"><i class="fas fa-chart-line"></i> Scenario 5: Complex Analysis</a>
+                <a href="#scenario-6" class="nav-link"><i class="fas fa-chart-bar"></i> Scenario 6: Visualizations</a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Results & Insights</div>
+                <a href="#key-takeaways" class="nav-link"><i class="fas fa-lightbulb"></i> Key Takeaways</a>
+                <a href="#use-cases" class="nav-link"><i class="fas fa-briefcase"></i> Real-World Use Cases</a>
+                <a href="#demo-flow" class="nav-link"><i class="fas fa-play-circle"></i> Demo Flow</a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Additional Info</div>
+                <a href="#generated-files" class="nav-link"><i class="fas fa-file-code"></i> Generated Files</a>
+                <a href="#security" class="nav-link"><i class="fas fa-shield-alt"></i> Security</a>
+                <a href="#getting-started" class="nav-link"><i class="fas fa-rocket"></i> Getting Started</a>
+                <a href="#resources" class="nav-link"><i class="fas fa-book-open"></i> Resources</a>
+                <a href="#conclusion" class="nav-link"><i class="fas fa-flag-checkered"></i> Conclusion</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="hero">
+                <h1>Bob-a-thon: MongoDB Made Simple with AI</h1>
+                <p>Transform complex database operations into simple conversations</p>
+            </div>
+
+            <!-- Overview -->
+            <section id="overview" class="content-section">
+                <h2>Overview</h2>
+                <p>This lab demonstrates how <strong>IBM Bob</strong> transforms MongoDB database operations from complex queries into simple natural language conversations. No need to memorize MongoDB syntax or write complex aggregation pipelines - just ask Bob!</p>
+            </section>
+
+            <!-- What You'll Learn -->
+            <section id="what-you-learn" class="content-section">
+                <h2>What You'll Learn</h2>
+                <ul>
+                    <li>Connect to MongoDB databases using natural language</li>
+                    <li>Explore database structures without writing queries</li>
+                    <li>Analyze data with complex aggregations through simple questions</li>
+                    <li>Generate interactive visualizations automatically</li>
+                    <li>Save hours of development time with AI-powered database operations</li>
+                </ul>
+            </section>
+
+            <!-- Prerequisites -->
+            <section id="prerequisites" class="content-section">
+                <h2>Prerequisites</h2>
+                <ul>
+                    <li>MongoDB installed locally (running on <code>localhost:27017</code>)</li>
+                    <li>Node.js installed</li>
+                    <li>IBM Bob</li>
+                    <li>Sample database: <code>Bobathon_Demo_Test_1</code></li>
+                </ul>
+            </section>
+
+            <!-- Scenario 1 -->
+            <section id="scenario-1" class="content-section">
+                <h2>Scenario 1: Connecting to MongoDB</h2>
+                
+                <h3>Traditional Approach:</h3>
+                <pre><code>const { MongoClient } = require('mongodb');
+const uri = 'mongodb://localhost:27017';
+const client = new MongoClient(uri);
+
+async function connect() {
+  try {
+    await client.connect();
+    console.log('Connected to MongoDB');
+  } catch (error) {
+    console.error('Connection failed:', error);
+  }
+}</code></pre>
+
+                <h3>Bob Approach:</h3>
+                <p>Simply ask Bob:</p>
+                <div class="highlight-box">
+                    <strong>"Can you connect to my mongodb?"</strong>
+                </div>
+
+                <h3>What Bob Does:</h3>
+                <ul>
+                    <li><span class="badge badge-success">Creates a complete Node.js project with package.json</span></li>
+                    <li><span class="badge badge-success">Installs MongoDB driver automatically</span></li>
+                    <li><span class="badge badge-success">Generates connection script with error handling</span></li>
+                    <li><span class="badge badge-success">Tests the connection and confirms success</span></li>
+                </ul>
+
+                <div class="screenshot-placeholder">
+                    [INSERT SCREENSHOT: Bob chat showing connection request and success]
+                </div>
+
+                <h3>Result:</h3>
+                <p>Bob creates <code>index.js</code> with full connection logic and confirms successful connection to your local MongoDB instance.</p>
+            </section>
+
+            <!-- Scenario 2 -->
+            <section id="scenario-2" class="content-section">
+                <h2>Scenario 2: Discovering Databases</h2>
+                
+                <h3>Traditional Approach:</h3>
+                <pre><code>const adminDb = client.db('admin').admin();
+const databasesList = await adminDb.listDatabases();
+console.log(databasesList.databases);</code></pre>
+
+                <h3>Bob Approach:</h3>
+                <div class="highlight-box">
+                    <strong>"How many databases are there in my local mongodb instance?"</strong>
+                </div>
+
+                <h3>What Bob Does:</h3>
+                <ul>
+                    <li><span class="badge badge-success">Queries all databases in your MongoDB instance</span></li>
+                    <li><span class="badge badge-success">Shows database names, sizes, and status</span></li>
+                    <li><span class="badge badge-success">Provides organized, readable output</span></li>
+                </ul>
+
+                <div class="screenshot-placeholder">
+                    [INSERT SCREENSHOT: Bob showing list of 5 databases with details]
+                </div>
+
+                <h3>Result:</h3>
+                <pre><code>Total Databases: 5
+
+Bobathon_Demo_Test_1 - 0.13 MB
+admin - 0.04 MB (system)
+config - 0.10 MB (system)
+local - 0.04 MB (system)
+my_new_test_db - 0.07 MB</code></pre>
+            </section>
+
+            <!-- Scenario 3 -->
+            <section id="scenario-3" class="content-section">
+                <h2>Scenario 3: Exploring Collections</h2>
+                
+                <h3>Traditional Approach:</h3>
+                <pre><code>const db = client.db('Bobathon_Demo_Test_1');
+const collections = await db.listCollections().toArray();
+collections.forEach(col => console.log(col.name));</code></pre>
+
+                <h3>Bob Approach:</h3>
+                <div class="highlight-box">
+                    <strong>"Which collections are there in Bobathon_Demo_Test_1 db?"</strong>
+                </div>
+
+                <h3>What Bob Does:</h3>
+                <ul>
+                    <li><span class="badge badge-success">Lists all collections in the specified database</span></li>
+                    <li><span class="badge badge-success">Shows collection statistics (document count, size)</span></li>
+                    <li><span class="badge badge-success">Updates the connection script to display this information</span></li>
+                </ul>
+
+                <div class="screenshot-placeholder">
+                    [INSERT SCREENSHOT: Bob showing 3 collections with details]
+                </div>
+
+                <h3>Result:</h3>
+                <pre><code>Collections in Bobathon_Demo_Test_1:
+• Inventory - 100 documents
+• sensors
+• FactoryMetrics</code></pre>
+            </section>
+
+            <!-- Scenario 4 -->
+            <section id="scenario-4" class="content-section">
+                <h2>Scenario 4: Querying Collection Data</h2>
+                
+                <h3>Traditional Approach:</h3>
+                <pre><code>const collection = db.collection('Inventory');
+const documents = await collection.find({}).toArray();
+console.log(JSON.stringify(documents, null, 2));</code></pre>
+
+                <h3>Bob Approach:</h3>
+                <div class="highlight-box">
+                    <strong>"What does Inventory collection contain?"</strong>
+                </div>
+
+                <h3>What Bob Does:</h3>
+                <ul>
+                    <li><span class="badge badge-success">Creates a dedicated query script (query-inventory.js)</span></li>
+                    <li><span class="badge badge-success">Fetches all documents with proper formatting</span></li>
+                    <li><span class="badge badge-success">Shows document structure and field names</span></li>
+                    <li><span class="badge badge-success">Displays sample data for understanding</span></li>
+                </ul>
+
+                <div class="screenshot-placeholder">
+                    [INSERT SCREENSHOT: Bob showing Inventory collection structure and sample documents]
+                </div>
+
+                <h3>Result:</h3>
+                <pre><code>Collection: Inventory
+Document Count: 100
+
+Sample Documents:
+{
+  "_id": "69bc7064db96cf3f7dbb0bf1",
+  "sku": "SKU-1001",
+  "product_name": "Electronics Item 1",
+  "category": "Electronics",
+  "stock": 39,
+  "price": 266.83,
+  "restock_unit_cost": 186.78,
+  "last_updated": "2026-03-19T21:53:40.328Z"
+}
+
+Fields: _id, sku, product_name, category, stock, price, restock_unit_cost, last_updated</code></pre>
+            </section>
+
+            <!-- Scenario 5 -->
+            <section id="scenario-5" class="content-section">
+                <h2>Scenario 5: Complex Data Analysis</h2>
+                
+                <h3>Traditional Approach (Complex Aggregation):</h3>
+                <pre><code>const pipeline = [
+  { $match: { stock: { $lt: 10 } } },
+  {
+    $group: {
+      _id: "$category",
+      count: { $sum: 1 },
+      totalRestockCost: {
+        $sum: {
+          $multiply: [
+            "$restock_unit_cost",
+            { $subtract: [10, "$stock"] }
+          ]
+        }
+      }
+    }
+  },
+  { $sort: { _id: 1 } }
+];
+
+const results = await collection.aggregate(pipeline).toArray();
+// Then format and display results...</code></pre>
+
+                <h3>Bob Approach:</h3>
+                <div class="highlight-box">
+                    <strong>"In Inventory collection, find all products with stock < 10, group them by category, and calculate the total restock cost"</strong>
+                </div>
+
+                <h3>What Bob Does:</h3>
+                <ul>
+                    <li><span class="badge badge-success">Creates specialized analysis script (low-stock-analysis.js)</span></li>
+                    <li><span class="badge badge-success">Performs complex filtering and grouping</span></li>
+                    <li><span class="badge badge-success">Calculates restock costs automatically</span></li>
+                    <li><span class="badge badge-success">Generates formatted reports with tables</span></li>
+                </ul>
+
+                <div class="screenshot-placeholder">
+                    [INSERT SCREENSHOT: Bob showing low stock analysis with category breakdown]
+                </div>
+
+                <h3>Result:</h3>
+                <pre><code>LOW STOCK ANALYSIS BY CATEGORY
+
+ELECTRONICS - 6 products
+Total Restock Cost: $2,180.45
+
+FURNITURE - 5 products
+Total Restock Cost: $5,842.19
+
+KITCHENWARE - 6 products
+Total Restock Cost: $5,870.11
+
+OFFICE SUPPLIES - 2 products
+Total Restock Cost: $877.86
+
+OUTDOOR - 5 products
+Total Restock Cost: $5,694.87
+
+GRAND TOTAL RESTOCK COST: $20,465.48</code></pre>
+
+                <div class="highlight-box">
+                    <strong>Time Saved:</strong> Writing this aggregation pipeline manually would take 30-60 minutes for someone unfamiliar with MongoDB. Bob does it in seconds!
+                </div>
+            </section>
+
+            <!-- Scenario 6 -->
+            <section id="scenario-6" class="content-section">
+                <h2>Scenario 6: Data Visualization</h2>
+                
+                <h3>Traditional Approach:</h3>
+                <pre><code>// Fetch data
+const products = await collection.find({}).toArray();
+
+// Calculate statistics
+const categoryStats = {};
+products.forEach(product => {
+  // Complex grouping logic...
+});
+
+// Generate HTML with Chart.js
+const html = `
+<!DOCTYPE html>
+<html>
+  <!-- 400+ lines of HTML, CSS, and JavaScript -->
+</html>
+`;
+
+fs.writeFileSync('dashboard.html', html);</code></pre>
+
+                <h3>Bob Approach:</h3>
+                <div class="highlight-box">
+                    <strong>"Can you create good statistical insight visualizations in HTML for all documents in the Inventory collection?"</strong>
+                </div>
+
+                <h3>What Bob Does:</h3>
+                <ul>
+                    <li><span class="badge badge-success">Creates dashboard generator script (generate-dashboard.js)</span></li>
+                    <li><span class="badge badge-success">Analyzes all 100 products automatically</span></li>
+                    <li><span class="badge badge-success">Generates interactive HTML dashboard with Chart.js</span></li>
+                    <li><span class="badge badge-success">Includes multiple chart types and data tables</span></li>
+                    <li><span class="badge badge-success">Applies professional styling and responsive design</span></li>
+                </ul>
+
+                <div class="screenshot-placeholder">
+                    [INSERT SCREENSHOT: Bob generating the dashboard]
+                </div>
+
+                <div class="screenshot-placeholder">
+                    [INSERT SCREENSHOT: Interactive HTML dashboard with charts]
+                </div>
+
+                <h3>Dashboard Features:</h3>
+                <ul>
+                    <li><strong>4 Key Metric Cards:</strong> Total Products, Inventory Value, Average Price, Average Stock</li>
+                    <li><strong>4 Interactive Charts:</strong>
+                        <ul>
+                            <li>Products by Category (Doughnut Chart)</li>
+                            <li>Stock Level Distribution (Bar Chart)</li>
+                            <li>Inventory Value by Category (Bar Chart)</li>
+                            <li>Price Range Distribution (Pie Chart)</li>
+                        </ul>
+                    </li>
+                    <li><strong>2 Data Tables:</strong>
+                        <ul>
+                            <li>Top 10 Most Valuable Products</li>
+                            <li>Low Stock Alert (with color-coded status badges)</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="highlight-box">
+                    <strong>Time Saved:</strong> Creating this dashboard manually would take 2-4 hours. Bob generates it in under 10 seconds!
+                </div>
+            </section>
+
+            <!-- Key Takeaways -->
+            <section id="key-takeaways" class="content-section">
+                <h2>Key Takeaways</h2>
+                
+                <h3>Before Bob (Traditional MongoDB Development)</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Time Required</th>
+                            <th>Complexity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Setup MongoDB connection</td>
+                            <td>15-30 min</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td>Write aggregation queries</td>
+                            <td>30-60 min</td>
+                            <td>High</td>
+                        </tr>
+                        <tr>
+                            <td>Create data visualizations</td>
+                            <td>2-4 hours</td>
+                            <td>Very High</td>
+                        </tr>
+                        <tr>
+                            <td>Debug and test</td>
+                            <td>30-60 min</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total Time</strong></td>
+                            <td><strong>4-6 hours</strong></td>
+                            <td><strong>High</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>With Bob (AI-Assisted Development)</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Time Required</th>
+                            <th>Complexity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Natural language request</td>
+                            <td>30 seconds</td>
+                            <td>None</td>
+                        </tr>
+                        <tr>
+                            <td>Bob generates code</td>
+                            <td>5-10 seconds</td>
+                            <td>None</td>
+                        </tr>
+                        <tr>
+                            <td>Review and run</td>
+                            <td>1-2 min</td>
+                            <td>Low</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total Time</strong></td>
+                            <td><strong>2-3 minutes</strong></td>
+                            <td><strong>Minimal</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Productivity Gains</h3>
+                <ul>
+                    <li><span class="badge badge-info">120x faster development time</span></li>
+                    <li><span class="badge badge-info">Zero MongoDB expertise required</span></li>
+                    <li><span class="badge badge-info">Fewer bugs - Bob generates tested code</span></li>
+                    <li><span class="badge badge-info">Learning tool - Study Bob's generated code</span></li>
+                    <li><span class="badge badge-info">Iterative refinement - Ask follow-up questions easily</span></li>
+                </ul>
+            </section>
+
+            <!-- Real-World Use Cases -->
+            <section id="use-cases" class="content-section">
+                <h2>Real-World Use Cases</h2>
+                
+                <h3>1. Business Analysts</h3>
+                <p><strong>Before:</strong> Wait for developers to write custom queries<br>
+                <strong>With Bob:</strong> Get instant insights through natural language</p>
+
+                <h3>2. New Developers</h3>
+                <p><strong>Before:</strong> Spend weeks learning MongoDB syntax<br>
+                <strong>With Bob:</strong> Start querying databases on day one</p>
+
+                <h3>3. Data Scientists</h3>
+                <p><strong>Before:</strong> Write complex aggregation pipelines<br>
+                <strong>With Bob:</strong> Focus on analysis, not query syntax</p>
+
+                <h3>4. DevOps Engineers</h3>
+                <p><strong>Before:</strong> Manual database inspection and monitoring<br>
+                <strong>With Bob:</strong> Quick health checks and data exploration</p>
+            </section>
+
+            <!-- Demo Flow -->
+            <section id="demo-flow" class="content-section">
+                <h2>Demo Flow for Bobathon</h2>
+                
+                <h3>Part 1: Introduction (2 minutes)</h3>
+                <ul>
+                    <li>Show traditional MongoDB query complexity</li>
+                    <li>Introduce Bob as the solution</li>
+                </ul>
+
+                <h3>Part 2: Live Demo (8 minutes)</h3>
+                <ul>
+                    <li><strong>Scenario 1-2:</strong> Connect and explore (2 min)</li>
+                    <li><strong>Scenario 3-4:</strong> Query data (2 min)</li>
+                    <li><strong>Scenario 5:</strong> Complex analysis (2 min)</li>
+                    <li><strong>Scenario 6:</strong> Visualizations (2 min)</li>
+                </ul>
+
+                <h3>Part 3: Q&A and Discussion (5 minutes)</h3>
+                <ul>
+                    <li>How Bob works</li>
+                    <li>Integration with existing workflows</li>
+                    <li>Security and best practices</li>
+                </ul>
+            </section>
+
+            <!-- Generated Files -->
+            <section id="generated-files" class="content-section">
+                <h2>Generated Files</h2>
+                <p>All files created by Bob during this lab:</p>
+                <pre><code>test-bob-mongo-connection/
+├── package.json                    # Node.js project configuration
+├── index.js                        # Main connection script
+├── query-inventory.js              # Collection query script
+├── low-stock-analysis.js           # Complex analysis script
+├── generate-dashboard.js           # Dashboard generator
+├── inventory-dashboard.html        # Interactive visualization
+└── README.md                       # This lab guide</code></pre>
+            </section>
+
+            <!-- Security -->
+            <section id="security" class="content-section">
+                <h2>Security Best Practices</h2>
+                <p>While Bob makes MongoDB easy, remember:</p>
+                <ul>
+                    <li><span class="badge badge-warning">Use environment variables for connection strings in production</span></li>
+                    <li><span class="badge badge-warning">Implement proper authentication and authorization</span></li>
+                    <li><span class="badge badge-warning">Review Bob's generated code before production use</span></li>
+                    <li><span class="badge badge-warning">Follow your organization's security policies</span></li>
+                    <li><span class="badge badge-warning">Use read-only connections for analysis when possible</span></li>
+                </ul>
+            </section>
+
+            <!-- Getting Started -->
+            <section id="getting-started" class="content-section">
+                <h2>Getting Started</h2>
+                
+                <h3>1. Install Prerequisites:</h3>
+                <pre><code># Install MongoDB locally
+# Install Node.js
+# Install IBM Bob</code></pre>
+
+                <h3>2. Clone This Repository:</h3>
+                <pre><code>git clone <repository-url>
+cd test-bob-mongo-connection</code></pre>
+
+                <h3>3. Start MongoDB:</h3>
+                <pre><code>mongod</code></pre>
+
+                <h3>4. Open in VS Code with Bob:</h3>
+                <pre><code>code .</code></pre>
+
+                <h3>5. Start Chatting with Bob:</h3>
+                <ul>
+                    <li>Open Bob chat panel</li>
+                    <li>Follow the scenarios above</li>
+                    <li>Watch the magic happen!</li>
+                </ul>
+            </section>
+
+            <!-- Resources -->
+            <section id="resources" class="content-section">
+                <h2>Additional Resources</h2>
+                <ul>
+                    <li><a href="https://docs.mongodb.com/" target="_blank">MongoDB Documentation</a></li>
+                    <li><a href="https://internal.bob.ibm.com/docs/ide" target="_blank">ibm Bob Documentation</a></li>
+                    <li><a href="https://mongodb.github.io/node-mongodb-native/" target="_blank">Node.js MongoDB Driver</a></li>
+                    <li><a href="https://www.chartjs.org/" target="_blank">Chart.js Documentation</a></li>
+                </ul>
+            </section>
+
+            <!-- Conclusion -->
+            <section id="conclusion" class="content-section">
+                <h2>Conclusion</h2>
+                <p>Bob transforms MongoDB from a complex database system requiring extensive knowledge into an accessible tool that anyone can use through natural language. Whether you're a seasoned developer or just starting out, Bob accelerates your productivity and reduces the learning curve dramatically.</p>
+                <p><strong>Ready to experience the future of database development? Start chatting with Bob today!</strong></p>
+                <hr style="margin: 30px 0;">
+                <p style="color: #7f8c8d; font-size: 0.9em;">
+                    <em>Last Updated: March 2026</em><br>
+                    <em>Prepared for: MongoDB Bobathon</em><br>
+                    <em>Contact: [Your Contact Information]</em>
+                </p>
+            </section>
+        </main>
+    </div>
+
+    <!-- Back to Top Button -->
+    <a href="#" class="back-to-top" id="backToTop">↑</a>
+
+    <script>
+        // Smooth scroll for navigation links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    
+                    // Update active link
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Back to top button
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Highlight active section on scroll
+        const sections = document.querySelectorAll('.content-section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
