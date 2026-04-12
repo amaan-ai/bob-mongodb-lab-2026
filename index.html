@@ -323,6 +323,7 @@
             <a href="#overview" class="side-nav-link">Overview</a>
             <a href="#what-you-learn" class="side-nav-link">What You'll Learn</a>
             <a href="#prerequisites" class="side-nav-link">Prerequisites</a>
+            <a href="#getting-started" class="side-nav-link">Getting Started</a>
         </div>
 
         <div class="side-nav-section">
@@ -339,14 +340,12 @@
             <div class="side-nav-title">Results & Insights</div>
             <a href="#key-takeaways" class="side-nav-link">Key Takeaways</a>
             <a href="#use-cases" class="side-nav-link">Real-World Use Cases</a>
-            <a href="#demo-flow" class="side-nav-link">Demo Flow</a>
         </div>
 
         <div class="side-nav-section">
             <div class="side-nav-title">Additional Info</div>
             <a href="#generated-files" class="side-nav-link">Generated Files</a>
             <a href="#security" class="side-nav-link">Security</a>
-            <a href="#getting-started" class="side-nav-link">Getting Started</a>
             <a href="#resources" class="side-nav-link">Resources</a>
             <a href="#conclusion" class="side-nav-link">Conclusion</a>
         </div>
@@ -355,7 +354,7 @@
     <div class="main-wrapper">
         <!-- Header -->
         <div class="header-content">
-            <h1>🚀 Bob-a-thon: MongoDB Made Simple with AI</h1>
+            <h1>Bob-a-thon: MongoDB Made Simple with AI</h1>
             <p>Transform complex database operations into simple conversations</p>
         </div>
 
@@ -387,6 +386,45 @@
                     <li>Node.js installed</li>
                     <li>IBM Bob</li>
                     <li>Sample database: <code>Bobathon_Demo_Test_1</code> (deployed on MongoDB Atlas)</li>
+                </ul>
+            </section>
+
+            <!-- Getting Started -->
+            <section id="getting-started" class="tile">
+                <h2>Getting Started</h2>
+                
+                <h3>1. Install Prerequisites:</h3>
+                <pre><code># Install Node.js
+# Install IBM Bob</code></pre>
+
+                <h3>2. Set Up MongoDB Atlas:</h3>
+                <ul>
+                    <li>Create a free MongoDB Atlas account at <a href="https://www.mongodb.com/cloud/atlas" target="_blank">https://www.mongodb.com/cloud/atlas</a></li>
+                    <li>Create a free tier cluster (M0)</li>
+                    <li>Set up database user credentials</li>
+                    <li>Whitelist your IP address</li>
+                    <li>Get your connection string</li>
+                </ul>
+
+                <h3>3. Clone This Repository:</h3>
+                <pre><code>git clone <repository-url>
+cd test-bob-mongo-connection</code></pre>
+
+                <h3>4. Configure Connection:</h3>
+                <ul>
+                    <li>Store your Atlas connection string securely</li>
+                    <li>Update connection string with your credentials</li>
+                </ul>
+
+                <h3>5. Open Bob IDE:</h3>
+                <pre><code># Launch Bob IDE and open your project directory</code></pre>
+
+                <h3>6. Start Chatting with Bob:</h3>
+                <ul>
+                    <li>Open Bob chat panel</li>
+                    <li>Provide your Atlas connection string when prompted</li>
+                    <li>Follow the scenarios below</li>
+                    <li>Watch the magic happen!</li>
                 </ul>
             </section>
 
@@ -458,8 +496,8 @@ console.log(databasesList.databases);</code></pre>
                 <h3>Result:</h3>
                 <pre><code>Total Databases: 2
 
-📁 Bobathon_Demo_Test_1 - 0.13 MB
-📁 my_new_test_db - 0.07 MB</code></pre>
+Bobathon_Demo_Test_1 - 0.13 MB
+my_new_test_db - 0.07 MB</code></pre>
             </section>
 
             <!-- Scenario 3 -->
@@ -521,10 +559,10 @@ console.log(JSON.stringify(documents, null, 2));</code></pre>
                 </div>
 
                 <h3>Result:</h3>
-                <pre><code>📊 Collection: Inventory
+                <pre><code>Collection: Inventory
    Document Count: 100
 
-📄 Sample Documents:
+Sample Documents:
 {
   "_id": "69bc7064db96cf3f7dbb0bf1",
   "sku": "SKU-1001",
@@ -536,7 +574,7 @@ console.log(JSON.stringify(documents, null, 2));</code></pre>
   "last_updated": "2026-03-19T21:53:40.328Z"
 }
 
-📋 Fields: _id, sku, product_name, category, stock, price, restock_unit_cost, last_updated</code></pre>
+Fields: _id, sku, product_name, category, stock, price, restock_unit_cost, last_updated</code></pre>
             </section>
 
             <!-- Scenario 5 -->
@@ -588,23 +626,23 @@ const results = await collection.aggregate(pipeline).toArray();
                     LOW STOCK ANALYSIS BY CATEGORY
 ═══════════════════════════════════════════════════════════════
 
-📦 ELECTRONICS - 6 products
+ELECTRONICS - 6 products
    Total Restock Cost: $2,180.45
 
-📦 FURNITURE - 5 products
+FURNITURE - 5 products
    Total Restock Cost: $5,842.19
 
-📦 KITCHENWARE - 6 products
+KITCHENWARE - 6 products
    Total Restock Cost: $5,870.11
 
-📦 OFFICE SUPPLIES - 2 products
+OFFICE SUPPLIES - 2 products
    Total Restock Cost: $877.86
 
-📦 OUTDOOR - 5 products
+OUTDOOR - 5 products
    Total Restock Cost: $5,694.87
 
 ═══════════════════════════════════════════════════════════════
-💰 GRAND TOTAL RESTOCK COST: $20,465.48
+GRAND TOTAL RESTOCK COST: $20,465.48
 ═══════════════════════════════════════════════════════════════</code></pre>
 
                 <div class="highlight-box">
@@ -757,7 +795,7 @@ fs.writeFileSync('dashboard.html', html);</code></pre>
                     </tbody>
                 </table>
 
-                <h3>🚀 Productivity Gains</h3>
+                <h3>Productivity Gains</h3>
                 <ul>
                     <li><span class="tag tag-blue">120x faster development time</span></li>
                     <li><span class="tag tag-blue">Zero MongoDB expertise required</span></li>
@@ -769,7 +807,7 @@ fs.writeFileSync('dashboard.html', html);</code></pre>
 
             <!-- Real-World Use Cases -->
             <section id="use-cases" class="tile">
-                <h2>💡 Real-World Use Cases</h2>
+                <h2>Real-World Use Cases</h2>
                 
                 <h3>1. Business Analysts</h3>
                 <p><strong>Before:</strong> Wait for developers to write custom queries<br>
@@ -788,35 +826,9 @@ fs.writeFileSync('dashboard.html', html);</code></pre>
                 <strong>With Bob:</strong> Quick health checks and data exploration</p>
             </section>
 
-            <!-- Demo Flow -->
-            <section id="demo-flow" class="tile">
-                <h2>🎬 Demo Flow for Bobathon</h2>
-                
-                <h3>Part 1: Introduction (2 minutes)</h3>
-                <ul>
-                    <li>Show traditional MongoDB query complexity</li>
-                    <li>Introduce Bob as the solution</li>
-                </ul>
-
-                <h3>Part 2: Live Demo (8 minutes)</h3>
-                <ul>
-                    <li><strong>Scenario 1-2:</strong> Connect and explore (2 min)</li>
-                    <li><strong>Scenario 3-4:</strong> Query data (2 min)</li>
-                    <li><strong>Scenario 5:</strong> Complex analysis (2 min)</li>
-                    <li><strong>Scenario 6:</strong> Visualizations (2 min)</li>
-                </ul>
-
-                <h3>Part 3: Q&A and Discussion (5 minutes)</h3>
-                <ul>
-                    <li>How Bob works</li>
-                    <li>Integration with existing workflows</li>
-                    <li>Security and best practices</li>
-                </ul>
-            </section>
-
             <!-- Generated Files -->
             <section id="generated-files" class="tile">
-                <h2>📁 Generated Files</h2>
+                <h2>Generated Files</h2>
                 <p>All files created by Bob during this lab:</p>
                 <pre><code>test-bob-mongo-connection/
 ├── package.json                    # Node.js project configuration
@@ -830,7 +842,7 @@ fs.writeFileSync('dashboard.html', html);</code></pre>
 
             <!-- Security -->
             <section id="security" class="tile">
-                <h2>🔐 Security Best Practices</h2>
+                <h2>Security Best Practices</h2>
                 <p>While Bob makes MongoDB Atlas easy, remember:</p>
                 <ul>
                     <li><span class="tag tag-red">Use environment variables for Atlas connection strings in production</span></li>
@@ -843,48 +855,9 @@ fs.writeFileSync('dashboard.html', html);</code></pre>
                 </ul>
             </section>
 
-            <!-- Getting Started -->
-            <section id="getting-started" class="tile">
-                <h2>🚀 Getting Started</h2>
-                
-                <h3>1. Install Prerequisites:</h3>
-                <pre><code># Install Node.js
-# Install IBM Bob</code></pre>
-
-                <h3>2. Set Up MongoDB Atlas:</h3>
-                <ul>
-                    <li>Create a free MongoDB Atlas account at <a href="https://www.mongodb.com/cloud/atlas" target="_blank">https://www.mongodb.com/cloud/atlas</a></li>
-                    <li>Create a free tier cluster (M0)</li>
-                    <li>Set up database user credentials</li>
-                    <li>Whitelist your IP address</li>
-                    <li>Get your connection string</li>
-                </ul>
-
-                <h3>3. Clone This Repository:</h3>
-                <pre><code>git clone <repository-url>
-cd test-bob-mongo-connection</code></pre>
-
-                <h3>4. Configure Connection:</h3>
-                <ul>
-                    <li>Store your Atlas connection string securely</li>
-                    <li>Update connection string with your credentials</li>
-                </ul>
-
-                <h3>5. Open in VS Code with Bob:</h3>
-                <pre><code>code .</code></pre>
-
-                <h3>6. Start Chatting with Bob:</h3>
-                <ul>
-                    <li>Open Bob chat panel</li>
-                    <li>Provide your Atlas connection string when prompted</li>
-                    <li>Follow the scenarios above</li>
-                    <li>Watch the magic happen!</li>
-                </ul>
-            </section>
-
             <!-- Resources -->
             <section id="resources" class="tile">
-                <h2>📚 Additional Resources</h2>
+                <h2>Additional Resources</h2>
                 <ul>
                     <li><a href="https://www.mongodb.com/docs/atlas/" target="_blank">MongoDB Atlas Documentation</a></li>
                     <li><a href="https://www.mongodb.com/products/mongodb-enterprise-advanced" target="_blank">MongoDB Enterprise Advanced</a></li>
@@ -896,7 +869,7 @@ cd test-bob-mongo-connection</code></pre>
 
             <!-- Conclusion -->
             <section id="conclusion" class="tile">
-                <h2>🎉 Conclusion</h2>
+                <h2>Conclusion</h2>
                 <p>Bob transforms MongoDB Atlas from a complex database system requiring extensive knowledge into an accessible tool that anyone can use through natural language. Whether you're a seasoned developer or just starting out, Bob accelerates your productivity and reduces the learning curve dramatically.</p>
                 <p>The combination of MongoDB Atlas's cloud-native database platform and IBM Bob's AI capabilities provides a powerful, secure, and scalable solution for modern application development.</p>
                 <p><strong>Ready to experience the future of database development? Start chatting with Bob and MongoDB Atlas today!</strong></p>

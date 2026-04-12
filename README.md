@@ -1,10 +1,10 @@
-# 🚀 Bob-a-thon: MongoDB Made Simple with AI
+# Bob-a-thon: MongoDB Made Simple with AI
 
 ## Overview
 
 This lab demonstrates how **IBM Bob** transforms MongoDB database operations from complex queries into simple natural language conversations. No need to memorize MongoDB syntax or write complex aggregation pipelines - just ask Bob!
 
-## 🎯 What You'll Learn
+## What You'll Learn
 
 - Connect to MongoDB databases using natural language
 - Explore database structures without writing queries
@@ -14,7 +14,7 @@ This lab demonstrates how **IBM Bob** transforms MongoDB database operations fro
 
 ---
 
-## 📋 Prerequisites
+## Prerequisites
 
 - MongoDB Atlas Free tier account (or MongoDB Enterprise Advanced)
 - Node.js installed
@@ -23,7 +23,45 @@ This lab demonstrates how **IBM Bob** transforms MongoDB database operations fro
 
 ---
 
-## 🧪 Lab Scenarios
+## Getting Started
+
+1. **Install Prerequisites:**
+   ```bash
+   # Install Node.js
+   # Install IBM Bob
+   ```
+
+2. **Set Up MongoDB Atlas:**
+   - Create a free MongoDB Atlas account at https://www.mongodb.com/cloud/atlas
+   - Create a free tier cluster (M0)
+   - Set up database user credentials
+   - Whitelist your IP address
+   - Get your connection string
+
+3. **Clone This Repository:**
+   ```bash
+   git clone <repository-url>
+   cd test-bob-mongo-connection
+   ```
+
+4. **Configure Connection:**
+   - Store your Atlas connection string securely
+   - Update connection string with your credentials
+
+5. **Open Bob IDE:**
+   ```bash
+   # Launch Bob IDE and open your project directory
+   ```
+
+6. **Start Chatting with Bob:**
+   - Open Bob chat panel
+   - Provide your Atlas connection string when prompted
+   - Follow the scenarios below
+   - Watch the magic happen!
+
+---
+
+## Lab Scenarios
 
 ### Scenario 1: Connecting to MongoDB
 
@@ -51,10 +89,10 @@ Simply ask Bob:
 ```
 
 **What Bob Does:**
-- ✅ Creates a complete Node.js project with `package.json`
-- ✅ Installs MongoDB driver automatically
-- ✅ Generates connection script with error handling for Atlas
-- ✅ Tests the connection and confirms success
+- Creates a complete Node.js project with `package.json`
+- Installs MongoDB driver automatically
+- Generates connection script with error handling for Atlas
+- Tests the connection and confirms success
 
 **Screenshot Placeholder:**
 ```
@@ -77,25 +115,25 @@ console.log(databasesList.databases);
 
 **Bob Approach:**
 ```
-"How many databases are there in my local mongodb instance?"
+"How many databases are there in my MongoDB Atlas cluster?"
 ```
 
 **What Bob Does:**
-- ✅ Queries all databases in your MongoDB instance
-- ✅ Shows database names, sizes, and status
-- ✅ Provides organized, readable output
+- Queries all databases in your MongoDB instance
+- Shows database names, sizes, and status
+- Provides organized, readable output
 
 **Screenshot Placeholder:**
 ```
-[INSERT SCREENSHOT: Bob showing list of 5 databases with details]
+[INSERT SCREENSHOT: Bob showing list of databases with details]
 ```
 
 **Result:**
 ```
 Total Databases: 2
 
-📁 Bobathon_Demo_Test_1 - 0.13 MB
-📁 my_new_test_db - 0.07 MB
+Bobathon_Demo_Test_1 - 0.13 MB
+my_new_test_db - 0.07 MB
 ```
 
 ---
@@ -115,9 +153,9 @@ collections.forEach(col => console.log(col.name));
 ```
 
 **What Bob Does:**
-- ✅ Lists all collections in the specified database
-- ✅ Shows collection statistics (document count, size)
-- ✅ Updates the connection script to display this information
+- Lists all collections in the specified database
+- Shows collection statistics (document count, size)
+- Updates the connection script to display this information
 
 **Screenshot Placeholder:**
 ```
@@ -149,10 +187,10 @@ console.log(JSON.stringify(documents, null, 2));
 ```
 
 **What Bob Does:**
-- ✅ Creates a dedicated query script ([`query-inventory.js`](query-inventory.js))
-- ✅ Fetches all documents with proper formatting
-- ✅ Shows document structure and field names
-- ✅ Displays sample data for understanding
+- Creates a dedicated query script ([`query-inventory.js`](query-inventory.js))
+- Fetches all documents with proper formatting
+- Shows document structure and field names
+- Displays sample data for understanding
 
 **Screenshot Placeholder:**
 ```
@@ -161,10 +199,10 @@ console.log(JSON.stringify(documents, null, 2));
 
 **Result:**
 ```
-📊 Collection: Inventory
+Collection: Inventory
    Document Count: 100
 
-📄 Sample Documents:
+Sample Documents:
 {
   "_id": "69bc7064db96cf3f7dbb0bf1",
   "sku": "SKU-1001",
@@ -176,7 +214,7 @@ console.log(JSON.stringify(documents, null, 2));
   "last_updated": "2026-03-19T21:53:40.328Z"
 }
 
-📋 Fields: _id, sku, product_name, category, stock, price, restock_unit_cost, last_updated
+Fields: _id, sku, product_name, category, stock, price, restock_unit_cost, last_updated
 ```
 
 ---
@@ -210,15 +248,15 @@ const results = await collection.aggregate(pipeline).toArray();
 
 **Bob Approach:**
 ```
-"In my Atlas Inventory collection, find all products with stock < 10,
+"In my Atlas Inventory collection, find all products with stock < 10, 
 group them by category, and calculate the total restock cost"
 ```
 
 **What Bob Does:**
-- ✅ Creates specialized analysis script ([`low-stock-analysis.js`](low-stock-analysis.js))
-- ✅ Performs complex filtering and grouping
-- ✅ Calculates restock costs automatically
-- ✅ Generates formatted reports with tables
+- Creates specialized analysis script ([`low-stock-analysis.js`](low-stock-analysis.js))
+- Performs complex filtering and grouping
+- Calculates restock costs automatically
+- Generates formatted reports with tables
 
 **Screenshot Placeholder:**
 ```
@@ -231,23 +269,23 @@ group them by category, and calculate the total restock cost"
                     LOW STOCK ANALYSIS BY CATEGORY
 ═══════════════════════════════════════════════════════════════
 
-📦 ELECTRONICS - 6 products
+ELECTRONICS - 6 products
    Total Restock Cost: $2,180.45
 
-📦 FURNITURE - 5 products
+FURNITURE - 5 products
    Total Restock Cost: $5,842.19
 
-📦 KITCHENWARE - 6 products
+KITCHENWARE - 6 products
    Total Restock Cost: $5,870.11
 
-📦 OFFICE SUPPLIES - 2 products
+OFFICE SUPPLIES - 2 products
    Total Restock Cost: $877.86
 
-📦 OUTDOOR - 5 products
+OUTDOOR - 5 products
    Total Restock Cost: $5,694.87
 
 ═══════════════════════════════════════════════════════════════
-💰 GRAND TOTAL RESTOCK COST: $20,465.48
+GRAND TOTAL RESTOCK COST: $20,465.48
 ═══════════════════════════════════════════════════════════════
 ```
 
@@ -281,16 +319,16 @@ fs.writeFileSync('dashboard.html', html);
 
 **Bob Approach:**
 ```
-"Can you create good statistical insight visualizations in HTML
+"Can you create good statistical insight visualizations in HTML 
 for all documents in the Inventory collection from my Atlas database?"
 ```
 
 **What Bob Does:**
-- ✅ Creates dashboard generator script ([`generate-dashboard.js`](generate-dashboard.js))
-- ✅ Analyzes all 100 products automatically
-- ✅ Generates interactive HTML dashboard with Chart.js
-- ✅ Includes multiple chart types and data tables
-- ✅ Applies professional styling and responsive design
+- Creates dashboard generator script ([`generate-dashboard.js`](generate-dashboard.js))
+- Analyzes all 100 products automatically
+- Generates interactive HTML dashboard with Chart.js
+- Includes multiple chart types and data tables
+- Applies professional styling and responsive design
 
 **Screenshot Placeholder:**
 ```
@@ -299,13 +337,13 @@ for all documents in the Inventory collection from my Atlas database?"
 ```
 
 **Dashboard Features:**
-- 📊 **4 Key Metric Cards:** Total Products, Inventory Value, Average Price, Average Stock
-- 📈 **4 Interactive Charts:**
+- **4 Key Metric Cards:** Total Products, Inventory Value, Average Price, Average Stock
+- **4 Interactive Charts:**
   - Products by Category (Doughnut Chart)
   - Stock Level Distribution (Bar Chart)
   - Inventory Value by Category (Bar Chart)
   - Price Range Distribution (Pie Chart)
-- 📋 **2 Data Tables:**
+- **2 Data Tables:**
   - Top 10 Most Valuable Products
   - Low Stock Alert (with color-coded status badges)
 
@@ -313,7 +351,7 @@ for all documents in the Inventory collection from my Atlas database?"
 
 ---
 
-## 🎯 Key Takeaways
+## Key Takeaways
 
 ### Before Bob (Traditional MongoDB Development)
 
@@ -334,17 +372,17 @@ for all documents in the Inventory collection from my Atlas database?"
 | Review and run | 1-2 min | Low |
 | **Total Time** | **2-3 minutes** | **Minimal** |
 
-### 🚀 Productivity Gains
+### Productivity Gains
 
-- ⚡ **120x faster** development time
-- 🎓 **Zero MongoDB expertise** required
-- 🐛 **Fewer bugs** - Bob generates tested code
-- 📚 **Learning tool** - Study Bob's generated code
-- 🔄 **Iterative refinement** - Ask follow-up questions easily
+- **120x faster** development time
+- **Zero MongoDB expertise** required
+- **Fewer bugs** - Bob generates tested code
+- **Learning tool** - Study Bob's generated code
+- **Iterative refinement** - Ask follow-up questions easily
 
 ---
 
-## 💡 Real-World Use Cases
+## Real-World Use Cases
 
 ### 1. Business Analysts
 **Before:** Wait for developers to write custom queries  
@@ -364,26 +402,7 @@ for all documents in the Inventory collection from my Atlas database?"
 
 ---
 
-## 🎬 Demo Flow for Bobathon
-
-### Part 1: Introduction (2 minutes)
-- Show traditional MongoDB query complexity
-- Introduce Bob as the solution
-
-### Part 2: Live Demo (8 minutes)
-- **Scenario 1-2:** Connect and explore (2 min)
-- **Scenario 3-4:** Query data (2 min)
-- **Scenario 5:** Complex analysis (2 min)
-- **Scenario 6:** Visualizations (2 min)
-
-### Part 3: Q&A and Discussion (5 minutes)
-- How Bob works
-- Integration with existing workflows
-- Security and best practices
-
----
-
-## 📁 Generated Files
+## Generated Files
 
 All files created by Bob during this lab:
 
@@ -400,59 +419,21 @@ test-bob-mongo-connection/
 
 ---
 
-## 🔐 Security Best Practices
+## Security Best Practices
 
 While Bob makes MongoDB Atlas easy, remember:
 
-- ✅ Use environment variables for Atlas connection strings in production
-- ✅ Implement proper authentication and authorization (Atlas provides built-in security)
-- ✅ Review Bob's generated code before production use
-- ✅ Follow your organization's security policies
-- ✅ Use read-only database users for analysis when possible
-- ✅ Enable IP whitelisting in Atlas for additional security
-- ✅ Use MongoDB Atlas encryption at rest and in transit
+- Use environment variables for Atlas connection strings in production
+- Implement proper authentication and authorization (Atlas provides built-in security)
+- Review Bob's generated code before production use
+- Follow your organization's security policies
+- Use read-only database users for analysis when possible
+- Enable IP whitelisting in Atlas for additional security
+- Use MongoDB Atlas encryption at rest and in transit
 
 ---
 
-## 🚀 Getting Started
-
-1. **Install Prerequisites:**
-   ```bash
-   # Install Node.js
-   # Install IBM Bob
-   ```
-
-2. **Set Up MongoDB Atlas:**
-   - Create a free MongoDB Atlas account at https://www.mongodb.com/cloud/atlas
-   - Create a free tier cluster (M0)
-   - Set up database user credentials
-   - Whitelist your IP address
-   - Get your connection string
-
-3. **Clone This Repository:**
-   ```bash
-   git clone <repository-url>
-   cd test-bob-mongo-connection
-   ```
-
-4. **Configure Connection:**
-   - Store your Atlas connection string securely
-   - Update connection string with your credentials
-
-5. **Open Bob IDE:**
-   ```bash
-   code .
-   ```
-
-6. **Start Chatting with Bob:**
-   - Open Bob chat panel
-   - Provide your Atlas connection string when prompted
-   - Follow the scenarios above
-   - Watch the magic happen!
-
----
-
-## 📚 Additional Resources
+## Additional Resources
 
 - [MongoDB Atlas Documentation](https://www.mongodb.com/docs/atlas/)
 - [MongoDB Enterprise Advanced](https://www.mongodb.com/products/mongodb-enterprise-advanced)
@@ -462,7 +443,7 @@ While Bob makes MongoDB Atlas easy, remember:
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Found an improvement? Have a suggestion? Feel free to:
 - Open an issue
@@ -471,13 +452,13 @@ Found an improvement? Have a suggestion? Feel free to:
 
 ---
 
-## 📝 License
+## License
 
 This lab guide is provided as-is for educational purposes.
 
 ---
 
-## 🎉 Conclusion
+## Conclusion
 
 Bob transforms MongoDB Atlas from a complex database system requiring extensive knowledge into an accessible tool that anyone can use through natural language. Whether you're a seasoned developer or just starting out, Bob accelerates your productivity and reduces the learning curve dramatically.
 
