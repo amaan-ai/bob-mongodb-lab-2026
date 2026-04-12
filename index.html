@@ -4,8 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bob-a-thon: MongoDB Made Simple with AI</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- IBM Plex Font -->
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --cds-ui-background: #f4f4f4;
+            --cds-ui-01: #ffffff;
+            --cds-ui-02: #f4f4f4;
+            --cds-interactive-01: #0f62fe;
+            --cds-text-01: #161616;
+            --cds-text-02: #525252;
+            --cds-text-03: #8d8d8d;
+            --cds-border-subtle: #e0e0e0;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,285 +27,262 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #333;
+            font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--cds-ui-background);
+            color: var(--cds-text-01);
+            line-height: 1.5;
         }
 
-        .container {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Sidebar Navigation */
-        .sidebar {
-            width: 280px;
-            background: #1a1a2e;
+        /* Header */
+        .header-content {
+            max-width: 100%;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #0f62fe 0%, #0043ce 100%);
             color: white;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-            z-index: 1000;
-        }
-
-        .sidebar-header {
-            padding: 30px 20px;
-            background: #16213e;
-            border-bottom: 2px solid #0f3460;
-        }
-
-        .sidebar-header h1 {
-            font-size: 1.4em;
-            margin-bottom: 8px;
-            color: #00d4ff;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .sidebar-header p {
-            font-size: 0.85em;
-            color: #a8b2d1;
-            font-weight: 300;
-        }
-
-        .nav-section {
-            padding: 20px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .nav-section-title {
-            padding: 10px 20px;
-            font-size: 0.85em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #95a5a6;
-            font-weight: 600;
-        }
-
-        .nav-link {
-            display: block;
-            padding: 12px 20px 12px 40px;
-            color: #ccd6f6;
-            text-decoration: none;
-            transition: all 0.3s;
-            border-left: 3px solid transparent;
-            font-size: 0.9em;
-        }
-
-        .nav-link:hover {
-            background: rgba(0, 212, 255, 0.1);
-            border-left-color: #00d4ff;
-            padding-left: 45px;
-            color: #00d4ff;
-        }
-
-        .nav-link.active {
-            background: rgba(0, 212, 255, 0.15);
-            border-left-color: #00d4ff;
-            font-weight: 600;
-            color: #00d4ff;
-        }
-
-        .nav-link i {
-            margin-right: 10px;
-            width: 16px;
             text-align: center;
+        }
+
+        .header-content h1 {
+            font-size: 2.5rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .header-content p {
+            font-size: 1.25rem;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        /* Navigation */
+        .side-nav {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 256px;
+            height: 100vh;
+            background-color: #262626;
+            overflow-y: auto;
+            z-index: 100;
+            border-right: 1px solid #393939;
+        }
+
+        .side-nav-section {
+            padding: 1rem 0;
+            border-bottom: 1px solid #393939;
+        }
+
+        .side-nav-title {
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #8d8d8d;
+        }
+
+        .side-nav-link {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #f4f4f4;
+            text-decoration: none;
+            transition: background-color 0.11s;
+            font-size: 0.875rem;
+        }
+
+        .side-nav-link:hover {
+            background-color: #353535;
+        }
+
+        .side-nav-link.active {
+            background-color: #393939;
+            border-left: 3px solid #0f62fe;
         }
 
         /* Main Content */
+        .main-wrapper {
+            margin-left: 256px;
+        }
+
         .main-content {
-            margin-left: 280px;
-            flex: 1;
-            padding: 40px 60px;
-            background: #f8f9fa;
+            padding: 2rem;
+            max-width: 1328px;
+            margin: 0 auto;
         }
 
-        .content-section {
-            background: white;
-            padding: 40px;
-            margin-bottom: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        .tile {
+            background-color: var(--cds-ui-01);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--cds-border-subtle);
         }
 
-        .content-section h2 {
-            color: #1a1a2e;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #00d4ff;
+        .tile h2 {
+            font-size: 1.75rem;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #0f62fe;
+        }
+
+        .tile h3 {
+            font-size: 1.25rem;
             font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
         }
 
-        .content-section h3 {
-            color: #16213e;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .content-section h4 {
-            color: #0f3460;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            font-weight: 500;
-        }
-
+        /* Code blocks */
         pre {
-            background: #1a1a2e;
-            color: #ccd6f6;
-            padding: 20px;
-            border-radius: 8px;
+            background-color: #262626;
+            color: #f4f4f4;
+            padding: 1.5rem;
+            border-radius: 4px;
             overflow-x: auto;
-            margin: 15px 0;
-            border-left: 4px solid #00d4ff;
+            margin: 1rem 0;
+            border-left: 4px solid #0f62fe;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
         }
 
         code {
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
+            font-family: 'IBM Plex Mono', monospace;
+            background-color: #e0e0e0;
+            padding: 0.125rem 0.5rem;
+            border-radius: 2px;
+            font-size: 0.875rem;
         }
 
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        /* Highlight box */
         .highlight-box {
-            background: #e6f7ff;
-            border-left: 4px solid #00d4ff;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 5px;
-            font-weight: 500;
+            background-color: #e5f6ff;
+            border-left: 4px solid #0f62fe;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
         }
 
-        .screenshot-placeholder {
-            background: #ecf0f1;
-            border: 2px dashed #95a5a6;
-            padding: 60px 20px;
-            text-align: center;
-            margin: 20px 0;
-            border-radius: 8px;
-            color: #7f8c8d;
-            font-style: italic;
+        .highlight-box strong {
+            font-size: 1.125rem;
+            color: #0043ce;
         }
 
-        .comparison-table {
+        /* Tags */
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 0 0.5rem;
+            height: 1.5rem;
+            margin: 0.25rem 0.25rem 0.25rem 0;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 0.9375rem;
+        }
+
+        .tag-green {
+            background-color: #24a148;
+            color: white;
+        }
+
+        .tag-blue {
+            background-color: #0f62fe;
+            color: white;
+        }
+
+        .tag-red {
+            background-color: #da1e28;
+            color: white;
+        }
+
+        /* Tables */
+        .data-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
+            margin: 1.5rem 0;
         }
 
-        .comparison-table th,
-        .comparison-table td {
-            padding: 15px;
+        .data-table thead {
+            background-color: #e0e0e0;
+        }
+
+        .data-table th {
+            padding: 1rem;
             text-align: left;
-            border: 1px solid #ddd;
-        }
-
-        .comparison-table th {
-            background: #16213e;
-            color: white;
             font-weight: 600;
+            font-size: 0.875rem;
+            border-bottom: 1px solid #e0e0e0;
         }
 
-        .comparison-table tr:nth-child(even) {
-            background: #f8f9fa;
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 0.875rem;
         }
 
-        .badge {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 600;
-            margin: 5px 5px 5px 0;
+        .data-table tbody tr:hover {
+            background-color: #f4f4f4;
         }
 
-        .badge-success {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .badge-info {
-            background: #d1ecf1;
-            color: #0c5460;
-        }
-
-        .badge-warning {
-            background: #fff3cd;
-            color: #856404;
-        }
-
+        /* Lists */
         ul, ol {
-            margin: 15px 0 15px 30px;
+            margin: 1rem 0 1rem 2rem;
         }
 
         li {
-            margin: 8px 0;
+            margin: 0.5rem 0;
+            line-height: 1.6;
         }
 
-        .hero {
-            background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
-            color: white;
-            padding: 60px 40px;
-            border-radius: 10px;
-            margin-bottom: 30px;
+        /* Links */
+        a {
+            color: #0f62fe;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Screenshot placeholder */
+        .screenshot-placeholder {
+            background-color: #f4f4f4;
+            border: 2px dashed #8d8d8d;
+            padding: 3rem 2rem;
             text-align: center;
-            border: 1px solid #00d4ff;
-        }
-
-        .hero h1 {
-            font-size: 2.5em;
-            margin-bottom: 15px;
-            font-weight: 600;
-            color: #00d4ff;
-        }
-
-        .hero p {
-            font-size: 1.2em;
-            opacity: 0.9;
-            color: #ccd6f6;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding: 20px;
-            }
-
-            .container {
-                flex-direction: column;
-            }
-        }
-
-        /* Smooth scroll */
-        html {
-            scroll-behavior: smooth;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+            color: #525252;
+            font-style: italic;
         }
 
         /* Back to top button */
         .back-to-top {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #00d4ff;
-            color: #1a1a2e;
-            width: 50px;
-            height: 50px;
+            bottom: 2rem;
+            right: 2rem;
+            width: 48px;
+            height: 48px;
+            background-color: #0f62fe;
+            color: white;
+            border: none;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            text-decoration: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            transition: all 0.3s;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
             opacity: 0;
             pointer-events: none;
-            font-weight: bold;
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 1000;
+            font-size: 1.5rem;
         }
 
         .back-to-top.visible {
@@ -300,69 +291,84 @@
         }
 
         .back-to-top:hover {
-            background: #00b8d4;
-            transform: translateY(-5px);
+            transform: translateY(-4px);
+            background-color: #0043ce;
+        }
+
+        /* Responsive */
+        @media (max-width: 1056px) {
+            .side-nav {
+                transform: translateX(-256px);
+            }
+
+            .main-wrapper {
+                margin-left: 0;
+            }
+
+            .header-content h1 {
+                font-size: 2rem;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Sidebar Navigation -->
-        <nav class="sidebar">
-            <div class="sidebar-header">
-                <h1>Bob-a-thon</h1>
-                <p>MongoDB Made Simple with AI</p>
-            </div>
+    <!-- Side Navigation -->
+    <nav class="side-nav">
+        <div class="side-nav-section">
+            <div class="side-nav-title">Getting Started</div>
+            <a href="#overview" class="side-nav-link">Overview</a>
+            <a href="#what-you-learn" class="side-nav-link">What You'll Learn</a>
+            <a href="#prerequisites" class="side-nav-link">Prerequisites</a>
+        </div>
 
-            <div class="nav-section">
-                <div class="nav-section-title">Getting Started</div>
-                <a href="#overview" class="nav-link"><i class="fas fa-book"></i> Overview</a>
-                <a href="#what-you-learn" class="nav-link"><i class="fas fa-graduation-cap"></i> What You'll Learn</a>
-                <a href="#prerequisites" class="nav-link"><i class="fas fa-list-check"></i> Prerequisites</a>
-            </div>
+        <div class="side-nav-section">
+            <div class="side-nav-title">Lab Scenarios</div>
+            <a href="#scenario-1" class="side-nav-link">Scenario 1: Connect</a>
+            <a href="#scenario-2" class="side-nav-link">Scenario 2: Discover DBs</a>
+            <a href="#scenario-3" class="side-nav-link">Scenario 3: Explore Collections</a>
+            <a href="#scenario-4" class="side-nav-link">Scenario 4: Query Data</a>
+            <a href="#scenario-5" class="side-nav-link">Scenario 5: Complex Analysis</a>
+            <a href="#scenario-6" class="side-nav-link">Scenario 6: Visualizations</a>
+        </div>
 
-            <div class="nav-section">
-                <div class="nav-section-title">Lab Scenarios</div>
-                <a href="#scenario-1" class="nav-link"><i class="fas fa-plug"></i> Scenario 1: Connect</a>
-                <a href="#scenario-2" class="nav-link"><i class="fas fa-database"></i> Scenario 2: Discover DBs</a>
-                <a href="#scenario-3" class="nav-link"><i class="fas fa-folder-open"></i> Scenario 3: Explore Collections</a>
-                <a href="#scenario-4" class="nav-link"><i class="fas fa-search"></i> Scenario 4: Query Data</a>
-                <a href="#scenario-5" class="nav-link"><i class="fas fa-chart-line"></i> Scenario 5: Complex Analysis</a>
-                <a href="#scenario-6" class="nav-link"><i class="fas fa-chart-bar"></i> Scenario 6: Visualizations</a>
-            </div>
+        <div class="side-nav-section">
+            <div class="side-nav-title">Results & Insights</div>
+            <a href="#key-takeaways" class="side-nav-link">Key Takeaways</a>
+            <a href="#use-cases" class="side-nav-link">Real-World Use Cases</a>
+            <a href="#demo-flow" class="side-nav-link">Demo Flow</a>
+        </div>
 
-            <div class="nav-section">
-                <div class="nav-section-title">Results & Insights</div>
-                <a href="#key-takeaways" class="nav-link"><i class="fas fa-lightbulb"></i> Key Takeaways</a>
-                <a href="#use-cases" class="nav-link"><i class="fas fa-briefcase"></i> Real-World Use Cases</a>
-                <a href="#demo-flow" class="nav-link"><i class="fas fa-play-circle"></i> Demo Flow</a>
-            </div>
+        <div class="side-nav-section">
+            <div class="side-nav-title">Additional Info</div>
+            <a href="#generated-files" class="side-nav-link">Generated Files</a>
+            <a href="#security" class="side-nav-link">Security</a>
+            <a href="#getting-started" class="side-nav-link">Getting Started</a>
+            <a href="#resources" class="side-nav-link">Resources</a>
+            <a href="#conclusion" class="side-nav-link">Conclusion</a>
+        </div>
+    </nav>
 
-            <div class="nav-section">
-                <div class="nav-section-title">Additional Info</div>
-                <a href="#generated-files" class="nav-link"><i class="fas fa-file-code"></i> Generated Files</a>
-                <a href="#security" class="nav-link"><i class="fas fa-shield-alt"></i> Security</a>
-                <a href="#getting-started" class="nav-link"><i class="fas fa-rocket"></i> Getting Started</a>
-                <a href="#resources" class="nav-link"><i class="fas fa-book-open"></i> Resources</a>
-                <a href="#conclusion" class="nav-link"><i class="fas fa-flag-checkered"></i> Conclusion</a>
-            </div>
-        </nav>
+    <div class="main-wrapper">
+        <!-- Header -->
+        <div class="header-content">
+            <h1>🚀 Bob-a-thon: MongoDB Made Simple with AI</h1>
+            <p>Transform complex database operations into simple conversations</p>
+        </div>
 
         <!-- Main Content -->
         <main class="main-content">
-            <div class="hero">
-                <h1>Bob-a-thon: MongoDB Made Simple with AI</h1>
-                <p>Transform complex database operations into simple conversations</p>
-            </div>
-
             <!-- Overview -->
-            <section id="overview" class="content-section">
+            <section id="overview" class="tile">
                 <h2>Overview</h2>
                 <p>This lab demonstrates how <strong>IBM Bob</strong> transforms MongoDB database operations from complex queries into simple natural language conversations. No need to memorize MongoDB syntax or write complex aggregation pipelines - just ask Bob!</p>
             </section>
 
             <!-- What You'll Learn -->
-            <section id="what-you-learn" class="content-section">
+            <section id="what-you-learn" class="tile">
                 <h2>What You'll Learn</h2>
                 <ul>
                     <li>Connect to MongoDB databases using natural language</li>
@@ -374,7 +380,7 @@
             </section>
 
             <!-- Prerequisites -->
-            <section id="prerequisites" class="content-section">
+            <section id="prerequisites" class="tile">
                 <h2>Prerequisites</h2>
                 <ul>
                     <li>MongoDB Atlas Free tier account (or MongoDB Enterprise Advanced)</li>
@@ -385,7 +391,7 @@
             </section>
 
             <!-- Scenario 1 -->
-            <section id="scenario-1" class="content-section">
+            <section id="scenario-1" class="tile">
                 <h2>Scenario 1: Connecting to MongoDB</h2>
                 
                 <h3>Traditional Approach:</h3>
@@ -410,10 +416,10 @@ async function connect() {
 
                 <h3>What Bob Does:</h3>
                 <ul>
-                    <li><span class="badge badge-success">Creates a complete Node.js project with package.json</span></li>
-                    <li><span class="badge badge-success">Installs MongoDB driver automatically</span></li>
-                    <li><span class="badge badge-success">Generates connection script with error handling for Atlas</span></li>
-                    <li><span class="badge badge-success">Tests the connection and confirms success</span></li>
+                    <li><span class="tag tag-green">Creates a complete Node.js project with package.json</span></li>
+                    <li><span class="tag tag-green">Installs MongoDB driver automatically</span></li>
+                    <li><span class="tag tag-green">Generates connection script with error handling for Atlas</span></li>
+                    <li><span class="tag tag-green">Tests the connection and confirms success</span></li>
                 </ul>
 
                 <div class="screenshot-placeholder">
@@ -425,7 +431,7 @@ async function connect() {
             </section>
 
             <!-- Scenario 2 -->
-            <section id="scenario-2" class="content-section">
+            <section id="scenario-2" class="tile">
                 <h2>Scenario 2: Discovering Databases</h2>
                 
                 <h3>Traditional Approach:</h3>
@@ -440,24 +446,24 @@ console.log(databasesList.databases);</code></pre>
 
                 <h3>What Bob Does:</h3>
                 <ul>
-                    <li><span class="badge badge-success">Queries all databases in your MongoDB instance</span></li>
-                    <li><span class="badge badge-success">Shows database names, sizes, and status</span></li>
-                    <li><span class="badge badge-success">Provides organized, readable output</span></li>
+                    <li><span class="tag tag-green">Queries all databases in your MongoDB instance</span></li>
+                    <li><span class="tag tag-green">Shows database names, sizes, and status</span></li>
+                    <li><span class="tag tag-green">Provides organized, readable output</span></li>
                 </ul>
 
                 <div class="screenshot-placeholder">
-                    [INSERT SCREENSHOT: Bob showing list of 5 databases with details]
+                    [INSERT SCREENSHOT: Bob showing list of databases with details]
                 </div>
 
                 <h3>Result:</h3>
                 <pre><code>Total Databases: 2
 
-Bobathon_Demo_Test_1 - 0.13 MB
-my_new_test_db - 0.07 MB</code></pre>
+📁 Bobathon_Demo_Test_1 - 0.13 MB
+📁 my_new_test_db - 0.07 MB</code></pre>
             </section>
 
             <!-- Scenario 3 -->
-            <section id="scenario-3" class="content-section">
+            <section id="scenario-3" class="tile">
                 <h2>Scenario 3: Exploring Collections</h2>
                 
                 <h3>Traditional Approach:</h3>
@@ -472,9 +478,9 @@ collections.forEach(col => console.log(col.name));</code></pre>
 
                 <h3>What Bob Does:</h3>
                 <ul>
-                    <li><span class="badge badge-success">Lists all collections in the specified database</span></li>
-                    <li><span class="badge badge-success">Shows collection statistics (document count, size)</span></li>
-                    <li><span class="badge badge-success">Updates the connection script to display this information</span></li>
+                    <li><span class="tag tag-green">Lists all collections in the specified database</span></li>
+                    <li><span class="tag tag-green">Shows collection statistics (document count, size)</span></li>
+                    <li><span class="tag tag-green">Updates the connection script to display this information</span></li>
                 </ul>
 
                 <div class="screenshot-placeholder">
@@ -489,7 +495,7 @@ collections.forEach(col => console.log(col.name));</code></pre>
             </section>
 
             <!-- Scenario 4 -->
-            <section id="scenario-4" class="content-section">
+            <section id="scenario-4" class="tile">
                 <h2>Scenario 4: Querying Collection Data</h2>
                 
                 <h3>Traditional Approach:</h3>
@@ -504,10 +510,10 @@ console.log(JSON.stringify(documents, null, 2));</code></pre>
 
                 <h3>What Bob Does:</h3>
                 <ul>
-                    <li><span class="badge badge-success">Creates a dedicated query script (query-inventory.js)</span></li>
-                    <li><span class="badge badge-success">Fetches all documents with proper formatting</span></li>
-                    <li><span class="badge badge-success">Shows document structure and field names</span></li>
-                    <li><span class="badge badge-success">Displays sample data for understanding</span></li>
+                    <li><span class="tag tag-green">Creates a dedicated query script (query-inventory.js)</span></li>
+                    <li><span class="tag tag-green">Fetches all documents with proper formatting</span></li>
+                    <li><span class="tag tag-green">Shows document structure and field names</span></li>
+                    <li><span class="tag tag-green">Displays sample data for understanding</span></li>
                 </ul>
 
                 <div class="screenshot-placeholder">
@@ -515,10 +521,10 @@ console.log(JSON.stringify(documents, null, 2));</code></pre>
                 </div>
 
                 <h3>Result:</h3>
-                <pre><code>Collection: Inventory
-Document Count: 100
+                <pre><code>📊 Collection: Inventory
+   Document Count: 100
 
-Sample Documents:
+📄 Sample Documents:
 {
   "_id": "69bc7064db96cf3f7dbb0bf1",
   "sku": "SKU-1001",
@@ -530,11 +536,11 @@ Sample Documents:
   "last_updated": "2026-03-19T21:53:40.328Z"
 }
 
-Fields: _id, sku, product_name, category, stock, price, restock_unit_cost, last_updated</code></pre>
+📋 Fields: _id, sku, product_name, category, stock, price, restock_unit_cost, last_updated</code></pre>
             </section>
 
             <!-- Scenario 5 -->
-            <section id="scenario-5" class="content-section">
+            <section id="scenario-5" class="tile">
                 <h2>Scenario 5: Complex Data Analysis</h2>
                 
                 <h3>Traditional Approach (Complex Aggregation):</h3>
@@ -567,10 +573,10 @@ const results = await collection.aggregate(pipeline).toArray();
 
                 <h3>What Bob Does:</h3>
                 <ul>
-                    <li><span class="badge badge-success">Creates specialized analysis script (low-stock-analysis.js)</span></li>
-                    <li><span class="badge badge-success">Performs complex filtering and grouping</span></li>
-                    <li><span class="badge badge-success">Calculates restock costs automatically</span></li>
-                    <li><span class="badge badge-success">Generates formatted reports with tables</span></li>
+                    <li><span class="tag tag-green">Creates specialized analysis script (low-stock-analysis.js)</span></li>
+                    <li><span class="tag tag-green">Performs complex filtering and grouping</span></li>
+                    <li><span class="tag tag-green">Calculates restock costs automatically</span></li>
+                    <li><span class="tag tag-green">Generates formatted reports with tables</span></li>
                 </ul>
 
                 <div class="screenshot-placeholder">
@@ -578,24 +584,28 @@ const results = await collection.aggregate(pipeline).toArray();
                 </div>
 
                 <h3>Result:</h3>
-                <pre><code>LOW STOCK ANALYSIS BY CATEGORY
+                <pre><code>═══════════════════════════════════════════════════════════════
+                    LOW STOCK ANALYSIS BY CATEGORY
+═══════════════════════════════════════════════════════════════
 
-ELECTRONICS - 6 products
-Total Restock Cost: $2,180.45
+📦 ELECTRONICS - 6 products
+   Total Restock Cost: $2,180.45
 
-FURNITURE - 5 products
-Total Restock Cost: $5,842.19
+📦 FURNITURE - 5 products
+   Total Restock Cost: $5,842.19
 
-KITCHENWARE - 6 products
-Total Restock Cost: $5,870.11
+📦 KITCHENWARE - 6 products
+   Total Restock Cost: $5,870.11
 
-OFFICE SUPPLIES - 2 products
-Total Restock Cost: $877.86
+📦 OFFICE SUPPLIES - 2 products
+   Total Restock Cost: $877.86
 
-OUTDOOR - 5 products
-Total Restock Cost: $5,694.87
+📦 OUTDOOR - 5 products
+   Total Restock Cost: $5,694.87
 
-GRAND TOTAL RESTOCK COST: $20,465.48</code></pre>
+═══════════════════════════════════════════════════════════════
+💰 GRAND TOTAL RESTOCK COST: $20,465.48
+═══════════════════════════════════════════════════════════════</code></pre>
 
                 <div class="highlight-box">
                     <strong>Time Saved:</strong> Writing this aggregation pipeline manually would take 30-60 minutes for someone unfamiliar with MongoDB. Bob does it in seconds!
@@ -603,7 +613,7 @@ GRAND TOTAL RESTOCK COST: $20,465.48</code></pre>
             </section>
 
             <!-- Scenario 6 -->
-            <section id="scenario-6" class="content-section">
+            <section id="scenario-6" class="tile">
                 <h2>Scenario 6: Data Visualization</h2>
                 
                 <h3>Traditional Approach:</h3>
@@ -633,11 +643,11 @@ fs.writeFileSync('dashboard.html', html);</code></pre>
 
                 <h3>What Bob Does:</h3>
                 <ul>
-                    <li><span class="badge badge-success">Creates dashboard generator script (generate-dashboard.js)</span></li>
-                    <li><span class="badge badge-success">Analyzes all 100 products automatically</span></li>
-                    <li><span class="badge badge-success">Generates interactive HTML dashboard with Chart.js</span></li>
-                    <li><span class="badge badge-success">Includes multiple chart types and data tables</span></li>
-                    <li><span class="badge badge-success">Applies professional styling and responsive design</span></li>
+                    <li><span class="tag tag-green">Creates dashboard generator script (generate-dashboard.js)</span></li>
+                    <li><span class="tag tag-green">Analyzes all 100 products automatically</span></li>
+                    <li><span class="tag tag-green">Generates interactive HTML dashboard with Chart.js</span></li>
+                    <li><span class="tag tag-green">Includes multiple chart types and data tables</span></li>
+                    <li><span class="tag tag-green">Applies professional styling and responsive design</span></li>
                 </ul>
 
                 <div class="screenshot-placeholder">
@@ -673,11 +683,11 @@ fs.writeFileSync('dashboard.html', html);</code></pre>
             </section>
 
             <!-- Key Takeaways -->
-            <section id="key-takeaways" class="content-section">
+            <section id="key-takeaways" class="tile">
                 <h2>Key Takeaways</h2>
                 
                 <h3>Before Bob (Traditional MongoDB Development)</h3>
-                <table class="comparison-table">
+                <table class="data-table">
                     <thead>
                         <tr>
                             <th>Task</th>
@@ -715,7 +725,7 @@ fs.writeFileSync('dashboard.html', html);</code></pre>
                 </table>
 
                 <h3>With Bob (AI-Assisted Development)</h3>
-                <table class="comparison-table">
+                <table class="data-table">
                     <thead>
                         <tr>
                             <th>Task</th>
@@ -747,19 +757,19 @@ fs.writeFileSync('dashboard.html', html);</code></pre>
                     </tbody>
                 </table>
 
-                <h3>Productivity Gains</h3>
+                <h3>🚀 Productivity Gains</h3>
                 <ul>
-                    <li><span class="badge badge-info">120x faster development time</span></li>
-                    <li><span class="badge badge-info">Zero MongoDB expertise required</span></li>
-                    <li><span class="badge badge-info">Fewer bugs - Bob generates tested code</span></li>
-                    <li><span class="badge badge-info">Learning tool - Study Bob's generated code</span></li>
-                    <li><span class="badge badge-info">Iterative refinement - Ask follow-up questions easily</span></li>
+                    <li><span class="tag tag-blue">120x faster development time</span></li>
+                    <li><span class="tag tag-blue">Zero MongoDB expertise required</span></li>
+                    <li><span class="tag tag-blue">Fewer bugs - Bob generates tested code</span></li>
+                    <li><span class="tag tag-blue">Learning tool - Study Bob's generated code</span></li>
+                    <li><span class="tag tag-blue">Iterative refinement - Ask follow-up questions easily</span></li>
                 </ul>
             </section>
 
             <!-- Real-World Use Cases -->
-            <section id="use-cases" class="content-section">
-                <h2>Real-World Use Cases</h2>
+            <section id="use-cases" class="tile">
+                <h2>💡 Real-World Use Cases</h2>
                 
                 <h3>1. Business Analysts</h3>
                 <p><strong>Before:</strong> Wait for developers to write custom queries<br>
@@ -779,8 +789,8 @@ fs.writeFileSync('dashboard.html', html);</code></pre>
             </section>
 
             <!-- Demo Flow -->
-            <section id="demo-flow" class="content-section">
-                <h2>Demo Flow for Bobathon</h2>
+            <section id="demo-flow" class="tile">
+                <h2>🎬 Demo Flow for Bobathon</h2>
                 
                 <h3>Part 1: Introduction (2 minutes)</h3>
                 <ul>
@@ -805,8 +815,8 @@ fs.writeFileSync('dashboard.html', html);</code></pre>
             </section>
 
             <!-- Generated Files -->
-            <section id="generated-files" class="content-section">
-                <h2>Generated Files</h2>
+            <section id="generated-files" class="tile">
+                <h2>📁 Generated Files</h2>
                 <p>All files created by Bob during this lab:</p>
                 <pre><code>test-bob-mongo-connection/
 ├── package.json                    # Node.js project configuration
@@ -819,23 +829,23 @@ fs.writeFileSync('dashboard.html', html);</code></pre>
             </section>
 
             <!-- Security -->
-            <section id="security" class="content-section">
-                <h2>Security Best Practices</h2>
+            <section id="security" class="tile">
+                <h2>🔐 Security Best Practices</h2>
                 <p>While Bob makes MongoDB Atlas easy, remember:</p>
                 <ul>
-                    <li><span class="badge badge-warning">Use environment variables for Atlas connection strings in production</span></li>
-                    <li><span class="badge badge-warning">Implement proper authentication and authorization (Atlas provides built-in security)</span></li>
-                    <li><span class="badge badge-warning">Review Bob's generated code before production use</span></li>
-                    <li><span class="badge badge-warning">Follow your organization's security policies</span></li>
-                    <li><span class="badge badge-warning">Use read-only database users for analysis when possible</span></li>
-                    <li><span class="badge badge-warning">Enable IP whitelisting in Atlas for additional security</span></li>
-                    <li><span class="badge badge-warning">Use MongoDB Atlas encryption at rest and in transit</span></li>
+                    <li><span class="tag tag-red">Use environment variables for Atlas connection strings in production</span></li>
+                    <li><span class="tag tag-red">Implement proper authentication and authorization (Atlas provides built-in security)</span></li>
+                    <li><span class="tag tag-red">Review Bob's generated code before production use</span></li>
+                    <li><span class="tag tag-red">Follow your organization's security policies</span></li>
+                    <li><span class="tag tag-red">Use read-only database users for analysis when possible</span></li>
+                    <li><span class="tag tag-red">Enable IP whitelisting in Atlas for additional security</span></li>
+                    <li><span class="tag tag-red">Use MongoDB Atlas encryption at rest and in transit</span></li>
                 </ul>
             </section>
 
             <!-- Getting Started -->
-            <section id="getting-started" class="content-section">
-                <h2>Getting Started</h2>
+            <section id="getting-started" class="tile">
+                <h2>🚀 Getting Started</h2>
                 
                 <h3>1. Install Prerequisites:</h3>
                 <pre><code># Install Node.js
@@ -873,8 +883,8 @@ cd test-bob-mongo-connection</code></pre>
             </section>
 
             <!-- Resources -->
-            <section id="resources" class="content-section">
-                <h2>Additional Resources</h2>
+            <section id="resources" class="tile">
+                <h2>📚 Additional Resources</h2>
                 <ul>
                     <li><a href="https://www.mongodb.com/docs/atlas/" target="_blank">MongoDB Atlas Documentation</a></li>
                     <li><a href="https://www.mongodb.com/products/mongodb-enterprise-advanced" target="_blank">MongoDB Enterprise Advanced</a></li>
@@ -885,27 +895,26 @@ cd test-bob-mongo-connection</code></pre>
             </section>
 
             <!-- Conclusion -->
-            <section id="conclusion" class="content-section">
-                <h2>Conclusion</h2>
+            <section id="conclusion" class="tile">
+                <h2>🎉 Conclusion</h2>
                 <p>Bob transforms MongoDB Atlas from a complex database system requiring extensive knowledge into an accessible tool that anyone can use through natural language. Whether you're a seasoned developer or just starting out, Bob accelerates your productivity and reduces the learning curve dramatically.</p>
                 <p>The combination of MongoDB Atlas's cloud-native database platform and IBM Bob's AI capabilities provides a powerful, secure, and scalable solution for modern application development.</p>
                 <p><strong>Ready to experience the future of database development? Start chatting with Bob and MongoDB Atlas today!</strong></p>
-                <hr style="margin: 30px 0;">
-                <p style="color: #7f8c8d; font-size: 0.9em;">
+                <hr style="margin: 2rem 0; border: none; border-top: 1px solid #e0e0e0;">
+                <p style="color: #525252; font-size: 0.875rem;">
                     <em>Last Updated: March 2026</em><br>
-                    <em>Prepared for: MongoDB Bobathon</em><br>
-                    <em>Contact: [Your Contact Information]</em>
+                    <em>Prepared for: MongoDB Bobathon</em>
                 </p>
             </section>
         </main>
     </div>
 
     <!-- Back to Top Button -->
-    <a href="#" class="back-to-top" id="backToTop">↑</a>
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
 
     <script>
         // Smooth scroll for navigation links
-        document.querySelectorAll('.nav-link').forEach(link => {
+        document.querySelectorAll('.side-nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 const targetId = this.getAttribute('href');
@@ -915,7 +924,7 @@ cd test-bob-mongo-connection</code></pre>
                     targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     
                     // Update active link
-                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    document.querySelectorAll('.side-nav-link').forEach(l => l.classList.remove('active'));
                     this.classList.add('active');
                 }
             });
@@ -938,8 +947,8 @@ cd test-bob-mongo-connection</code></pre>
         });
 
         // Highlight active section on scroll
-        const sections = document.querySelectorAll('.content-section');
-        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.tile');
+        const navLinks = document.querySelectorAll('.side-nav-link');
 
         window.addEventListener('scroll', () => {
             let current = '';

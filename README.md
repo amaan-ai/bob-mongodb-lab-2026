@@ -439,7 +439,7 @@ While Bob makes MongoDB Atlas easy, remember:
    - Store your Atlas connection string securely
    - Update connection string with your credentials
 
-5. **Open in VS Code with Bob:**
+5. **Open Bob IDE:**
    ```bash
    code .
    ```
