@@ -16,10 +16,10 @@ This lab demonstrates how **IBM Bob** transforms MongoDB database operations fro
 
 ## 📋 Prerequisites
 
-- MongoDB installed locally (running on `localhost:27017`)
+- MongoDB Atlas Free tier account (or MongoDB Enterprise Advanced)
 - Node.js installed
 - IBM Bob
-- Sample database: `Bobathon_Demo_Test_1`
+- Sample database: `Bobathon_Demo_Test_1` (deployed on MongoDB Atlas)
 
 ---
 
@@ -30,13 +30,13 @@ This lab demonstrates how **IBM Bob** transforms MongoDB database operations fro
 **Traditional Approach:**
 ```javascript
 const { MongoClient } = require('mongodb');
-const uri = 'mongodb://localhost:27017';
+const uri = 'mongodb+srv://<username>:<password>@<cluster>.mongodb.net/?retryWrites=true&w=majority';
 const client = new MongoClient(uri);
 
 async function connect() {
   try {
     await client.connect();
-    console.log('Connected to MongoDB');
+    console.log('Connected to MongoDB Atlas');
   } catch (error) {
     console.error('Connection failed:', error);
   }
@@ -47,13 +47,13 @@ async function connect() {
 Simply ask Bob:
 
 ```
-"Can you connect to my mongodb?"
+"Can you connect to my MongoDB Atlas database?"
 ```
 
 **What Bob Does:**
 - ✅ Creates a complete Node.js project with `package.json`
 - ✅ Installs MongoDB driver automatically
-- ✅ Generates connection script with error handling
+- ✅ Generates connection script with error handling for Atlas
 - ✅ Tests the connection and confirms success
 
 **Screenshot Placeholder:**
@@ -62,7 +62,7 @@ Simply ask Bob:
 ```
 
 **Result:**
-Bob creates [`index.js`](index.js) with full connection logic and confirms successful connection to your local MongoDB instance.
+Bob creates [`index.js`](index.js) with full connection logic and confirms successful connection to your MongoDB Atlas cluster.
 
 ---
 
@@ -92,12 +92,9 @@ console.log(databasesList.databases);
 
 **Result:**
 ```
-Total Databases: 5
+Total Databases: 2
 
 📁 Bobathon_Demo_Test_1 - 0.13 MB
-📁 admin - 0.04 MB (system)
-📁 config - 0.10 MB (system)
-📁 local - 0.04 MB (system)
 📁 my_new_test_db - 0.07 MB
 ```
 
@@ -114,7 +111,7 @@ collections.forEach(col => console.log(col.name));
 
 **Bob Approach:**
 ```
-"Which collections are there in Bobathon_Demo_Test_1 db?"
+"Which collections are there in Bobathon_Demo_Test_1 database on Atlas?"
 ```
 
 **What Bob Does:**
@@ -148,7 +145,7 @@ console.log(JSON.stringify(documents, null, 2));
 
 **Bob Approach:**
 ```
-"What does Inventory collection contain?"
+"What does Inventory collection contain in my Atlas database?"
 ```
 
 **What Bob Does:**
@@ -213,7 +210,7 @@ const results = await collection.aggregate(pipeline).toArray();
 
 **Bob Approach:**
 ```
-"In Inventory collection, find all products with stock < 10, 
+"In my Atlas Inventory collection, find all products with stock < 10,
 group them by category, and calculate the total restock cost"
 ```
 
@@ -284,8 +281,8 @@ fs.writeFileSync('dashboard.html', html);
 
 **Bob Approach:**
 ```
-"Can you create good statistical insight visualizations in HTML 
-for all documents in the Inventory collection?"
+"Can you create good statistical insight visualizations in HTML
+for all documents in the Inventory collection from my Atlas database?"
 ```
 
 **What Bob Does:**
@@ -405,13 +402,15 @@ test-bob-mongo-connection/
 
 ## 🔐 Security Best Practices
 
-While Bob makes MongoDB easy, remember:
+While Bob makes MongoDB Atlas easy, remember:
 
-- ✅ Use environment variables for connection strings in production
-- ✅ Implement proper authentication and authorization
+- ✅ Use environment variables for Atlas connection strings in production
+- ✅ Implement proper authentication and authorization (Atlas provides built-in security)
 - ✅ Review Bob's generated code before production use
 - ✅ Follow your organization's security policies
-- ✅ Use read-only connections for analysis when possible
+- ✅ Use read-only database users for analysis when possible
+- ✅ Enable IP whitelisting in Atlas for additional security
+- ✅ Use MongoDB Atlas encryption at rest and in transit
 
 ---
 
@@ -419,29 +418,35 @@ While Bob makes MongoDB easy, remember:
 
 1. **Install Prerequisites:**
    ```bash
-   # Install MongoDB locally
    # Install Node.js
-   # Install IBM BoB
+   # Install IBM Bob
    ```
 
-2. **Clone This Repository:**
+2. **Set Up MongoDB Atlas:**
+   - Create a free MongoDB Atlas account at https://www.mongodb.com/cloud/atlas
+   - Create a free tier cluster (M0)
+   - Set up database user credentials
+   - Whitelist your IP address
+   - Get your connection string
+
+3. **Clone This Repository:**
    ```bash
    git clone <repository-url>
    cd test-bob-mongo-connection
    ```
 
-3. **Start MongoDB:**
-   ```bash
-   mongod
-   ```
+4. **Configure Connection:**
+   - Store your Atlas connection string securely
+   - Update connection string with your credentials
 
-4. **Open in VS Code with Bob:**
+5. **Open in VS Code with Bob:**
    ```bash
    code .
    ```
 
-5. **Start Chatting with Bob:**
+6. **Start Chatting with Bob:**
    - Open Bob chat panel
+   - Provide your Atlas connection string when prompted
    - Follow the scenarios above
    - Watch the magic happen!
 
@@ -449,8 +454,9 @@ While Bob makes MongoDB easy, remember:
 
 ## 📚 Additional Resources
 
-- [MongoDB Documentation](https://docs.mongodb.com/)
-- [IBM Bob Documentation](https://www.ibm.com/products/bob)
+- [MongoDB Atlas Documentation](https://www.mongodb.com/docs/atlas/)
+- [MongoDB Enterprise Advanced](https://www.mongodb.com/products/mongodb-enterprise-advanced)
+- [IBM Bob Documentation](https://internal.bob.ibm.com/docs/ide)
 - [Node.js MongoDB Driver](https://mongodb.github.io/node-mongodb-native/)
 - [Chart.js Documentation](https://www.chartjs.org/)
 
@@ -473,9 +479,11 @@ This lab guide is provided as-is for educational purposes.
 
 ## 🎉 Conclusion
 
-Bob transforms MongoDB from a complex database system requiring extensive knowledge into an accessible tool that anyone can use through natural language. Whether you're a seasoned developer or just starting out, Bob accelerates your productivity and reduces the learning curve dramatically.
+Bob transforms MongoDB Atlas from a complex database system requiring extensive knowledge into an accessible tool that anyone can use through natural language. Whether you're a seasoned developer or just starting out, Bob accelerates your productivity and reduces the learning curve dramatically.
 
-**Ready to experience the future of database development? Start chatting with Bob today!**
+The combination of MongoDB Atlas's cloud-native database platform and IBM Bob's AI capabilities provides a powerful, secure, and scalable solution for modern application development.
+
+**Ready to experience the future of database development? Start chatting with Bob and MongoDB Atlas today!**
 
 ---
 

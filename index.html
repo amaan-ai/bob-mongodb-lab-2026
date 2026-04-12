@@ -377,10 +377,10 @@
             <section id="prerequisites" class="content-section">
                 <h2>Prerequisites</h2>
                 <ul>
-                    <li>MongoDB installed locally (running on <code>localhost:27017</code>)</li>
+                    <li>MongoDB Atlas Free tier account (or MongoDB Enterprise Advanced)</li>
                     <li>Node.js installed</li>
                     <li>IBM Bob</li>
-                    <li>Sample database: <code>Bobathon_Demo_Test_1</code></li>
+                    <li>Sample database: <code>Bobathon_Demo_Test_1</code> (deployed on MongoDB Atlas)</li>
                 </ul>
             </section>
 
@@ -390,13 +390,13 @@
                 
                 <h3>Traditional Approach:</h3>
                 <pre><code>const { MongoClient } = require('mongodb');
-const uri = 'mongodb://localhost:27017';
+const uri = 'mongodb+srv://<username>:<password>@<cluster>.mongodb.net/?retryWrites=true&w=majority';
 const client = new MongoClient(uri);
 
 async function connect() {
   try {
     await client.connect();
-    console.log('Connected to MongoDB');
+    console.log('Connected to MongoDB Atlas');
   } catch (error) {
     console.error('Connection failed:', error);
   }
@@ -405,14 +405,14 @@ async function connect() {
                 <h3>Bob Approach:</h3>
                 <p>Simply ask Bob:</p>
                 <div class="highlight-box">
-                    <strong>"Can you connect to my mongodb?"</strong>
+                    <strong>"Can you connect to my MongoDB Atlas database?"</strong>
                 </div>
 
                 <h3>What Bob Does:</h3>
                 <ul>
                     <li><span class="badge badge-success">Creates a complete Node.js project with package.json</span></li>
                     <li><span class="badge badge-success">Installs MongoDB driver automatically</span></li>
-                    <li><span class="badge badge-success">Generates connection script with error handling</span></li>
+                    <li><span class="badge badge-success">Generates connection script with error handling for Atlas</span></li>
                     <li><span class="badge badge-success">Tests the connection and confirms success</span></li>
                 </ul>
 
@@ -421,7 +421,7 @@ async function connect() {
                 </div>
 
                 <h3>Result:</h3>
-                <p>Bob creates <code>index.js</code> with full connection logic and confirms successful connection to your local MongoDB instance.</p>
+                <p>Bob creates <code>index.js</code> with full connection logic and confirms successful connection to your MongoDB Atlas cluster.</p>
             </section>
 
             <!-- Scenario 2 -->
@@ -435,7 +435,7 @@ console.log(databasesList.databases);</code></pre>
 
                 <h3>Bob Approach:</h3>
                 <div class="highlight-box">
-                    <strong>"How many databases are there in my local mongodb instance?"</strong>
+                    <strong>"How many databases are there in my MongoDB Atlas cluster?"</strong>
                 </div>
 
                 <h3>What Bob Does:</h3>
@@ -450,12 +450,9 @@ console.log(databasesList.databases);</code></pre>
                 </div>
 
                 <h3>Result:</h3>
-                <pre><code>Total Databases: 5
+                <pre><code>Total Databases: 2
 
 Bobathon_Demo_Test_1 - 0.13 MB
-admin - 0.04 MB (system)
-config - 0.10 MB (system)
-local - 0.04 MB (system)
 my_new_test_db - 0.07 MB</code></pre>
             </section>
 
@@ -470,7 +467,7 @@ collections.forEach(col => console.log(col.name));</code></pre>
 
                 <h3>Bob Approach:</h3>
                 <div class="highlight-box">
-                    <strong>"Which collections are there in Bobathon_Demo_Test_1 db?"</strong>
+                    <strong>"Which collections are there in Bobathon_Demo_Test_1 database on Atlas?"</strong>
                 </div>
 
                 <h3>What Bob Does:</h3>
@@ -502,7 +499,7 @@ console.log(JSON.stringify(documents, null, 2));</code></pre>
 
                 <h3>Bob Approach:</h3>
                 <div class="highlight-box">
-                    <strong>"What does Inventory collection contain?"</strong>
+                    <strong>"What does Inventory collection contain in my Atlas database?"</strong>
                 </div>
 
                 <h3>What Bob Does:</h3>
@@ -565,7 +562,7 @@ const results = await collection.aggregate(pipeline).toArray();
 
                 <h3>Bob Approach:</h3>
                 <div class="highlight-box">
-                    <strong>"In Inventory collection, find all products with stock < 10, group them by category, and calculate the total restock cost"</strong>
+                    <strong>"In my Atlas Inventory collection, find all products with stock < 10, group them by category, and calculate the total restock cost"</strong>
                 </div>
 
                 <h3>What Bob Does:</h3>
@@ -631,7 +628,7 @@ fs.writeFileSync('dashboard.html', html);</code></pre>
 
                 <h3>Bob Approach:</h3>
                 <div class="highlight-box">
-                    <strong>"Can you create good statistical insight visualizations in HTML for all documents in the Inventory collection?"</strong>
+                    <strong>"Can you create good statistical insight visualizations in HTML for all documents in the Inventory collection from my Atlas database?"</strong>
                 </div>
 
                 <h3>What Bob Does:</h3>
@@ -824,13 +821,15 @@ fs.writeFileSync('dashboard.html', html);</code></pre>
             <!-- Security -->
             <section id="security" class="content-section">
                 <h2>Security Best Practices</h2>
-                <p>While Bob makes MongoDB easy, remember:</p>
+                <p>While Bob makes MongoDB Atlas easy, remember:</p>
                 <ul>
-                    <li><span class="badge badge-warning">Use environment variables for connection strings in production</span></li>
-                    <li><span class="badge badge-warning">Implement proper authentication and authorization</span></li>
+                    <li><span class="badge badge-warning">Use environment variables for Atlas connection strings in production</span></li>
+                    <li><span class="badge badge-warning">Implement proper authentication and authorization (Atlas provides built-in security)</span></li>
                     <li><span class="badge badge-warning">Review Bob's generated code before production use</span></li>
                     <li><span class="badge badge-warning">Follow your organization's security policies</span></li>
-                    <li><span class="badge badge-warning">Use read-only connections for analysis when possible</span></li>
+                    <li><span class="badge badge-warning">Use read-only database users for analysis when possible</span></li>
+                    <li><span class="badge badge-warning">Enable IP whitelisting in Atlas for additional security</span></li>
+                    <li><span class="badge badge-warning">Use MongoDB Atlas encryption at rest and in transit</span></li>
                 </ul>
             </section>
 
@@ -839,23 +838,35 @@ fs.writeFileSync('dashboard.html', html);</code></pre>
                 <h2>Getting Started</h2>
                 
                 <h3>1. Install Prerequisites:</h3>
-                <pre><code># Install MongoDB locally
-# Install Node.js
+                <pre><code># Install Node.js
 # Install IBM Bob</code></pre>
 
-                <h3>2. Clone This Repository:</h3>
+                <h3>2. Set Up MongoDB Atlas:</h3>
+                <ul>
+                    <li>Create a free MongoDB Atlas account at <a href="https://www.mongodb.com/cloud/atlas" target="_blank">https://www.mongodb.com/cloud/atlas</a></li>
+                    <li>Create a free tier cluster (M0)</li>
+                    <li>Set up database user credentials</li>
+                    <li>Whitelist your IP address</li>
+                    <li>Get your connection string</li>
+                </ul>
+
+                <h3>3. Clone This Repository:</h3>
                 <pre><code>git clone <repository-url>
 cd test-bob-mongo-connection</code></pre>
 
-                <h3>3. Start MongoDB:</h3>
-                <pre><code>mongod</code></pre>
+                <h3>4. Configure Connection:</h3>
+                <ul>
+                    <li>Store your Atlas connection string securely</li>
+                    <li>Update connection string with your credentials</li>
+                </ul>
 
-                <h3>4. Open in VS Code with Bob:</h3>
+                <h3>5. Open in VS Code with Bob:</h3>
                 <pre><code>code .</code></pre>
 
-                <h3>5. Start Chatting with Bob:</h3>
+                <h3>6. Start Chatting with Bob:</h3>
                 <ul>
                     <li>Open Bob chat panel</li>
+                    <li>Provide your Atlas connection string when prompted</li>
                     <li>Follow the scenarios above</li>
                     <li>Watch the magic happen!</li>
                 </ul>
@@ -865,8 +876,9 @@ cd test-bob-mongo-connection</code></pre>
             <section id="resources" class="content-section">
                 <h2>Additional Resources</h2>
                 <ul>
-                    <li><a href="https://docs.mongodb.com/" target="_blank">MongoDB Documentation</a></li>
-                    <li><a href="https://internal.bob.ibm.com/docs/ide" target="_blank">ibm Bob Documentation</a></li>
+                    <li><a href="https://www.mongodb.com/docs/atlas/" target="_blank">MongoDB Atlas Documentation</a></li>
+                    <li><a href="https://www.mongodb.com/products/mongodb-enterprise-advanced" target="_blank">MongoDB Enterprise Advanced</a></li>
+                    <li><a href="https://internal.bob.ibm.com/docs/ide" target="_blank">IBM Bob Documentation</a></li>
                     <li><a href="https://mongodb.github.io/node-mongodb-native/" target="_blank">Node.js MongoDB Driver</a></li>
                     <li><a href="https://www.chartjs.org/" target="_blank">Chart.js Documentation</a></li>
                 </ul>
@@ -875,8 +887,9 @@ cd test-bob-mongo-connection</code></pre>
             <!-- Conclusion -->
             <section id="conclusion" class="content-section">
                 <h2>Conclusion</h2>
-                <p>Bob transforms MongoDB from a complex database system requiring extensive knowledge into an accessible tool that anyone can use through natural language. Whether you're a seasoned developer or just starting out, Bob accelerates your productivity and reduces the learning curve dramatically.</p>
-                <p><strong>Ready to experience the future of database development? Start chatting with Bob today!</strong></p>
+                <p>Bob transforms MongoDB Atlas from a complex database system requiring extensive knowledge into an accessible tool that anyone can use through natural language. Whether you're a seasoned developer or just starting out, Bob accelerates your productivity and reduces the learning curve dramatically.</p>
+                <p>The combination of MongoDB Atlas's cloud-native database platform and IBM Bob's AI capabilities provides a powerful, secure, and scalable solution for modern application development.</p>
+                <p><strong>Ready to experience the future of database development? Start chatting with Bob and MongoDB Atlas today!</strong></p>
                 <hr style="margin: 30px 0;">
                 <p style="color: #7f8c8d; font-size: 0.9em;">
                     <em>Last Updated: March 2026</em><br>
